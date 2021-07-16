@@ -1,0 +1,54 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%		Thesis Rogerio Jorge
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{head/settings_epfl_template.tex}
+\input{head/settings_custom.tex} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% HEAD: Book-Begin
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\frontmatter
+\input{head/titlepage.tex}
+\input{head/contracapa.tex}
+% % % \include{head/dedication}
+\include{head/acknowledgements}
+\include{head/preface}
+\include{head/abstracts}
+
+\tableofcontents
+%\addcontentsline{toc}{chapter}{List of figures} % adds an entry to the table of contents
+%\listoffigures
+%\addcontentsline{toc}{chapter}{List of tables} % adds an entry to the table of contents
+%\listoftables
+% your list of symbols here, if needed.
+
+% space before each new paragraph according to the template guidelines.
+%(needs to be after titlepage and frontmatter to keep the table of contents lists short)
+\setlength{\parskip}{1em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% MAIN: The chapters of the thesis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mainmatter
+\include{main/ch1_introduction}
+\include{main/ch2_drift_kinetic}
+\include{main/ch3_gyrokinetic}
+\include{main/ch4_collision_operator}
+\include{main/ch6_electron_plasma_waves}
+\include{main/ch7_drift_wave_instability}
+\include{main/ch8_conclusion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% TAIL: Bibliography, Appendix, CV
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{tail/appendix}
+\include{tail/biblio}
+% Add your glossary here
+% Add your index here
+%\include{tail/cv}
+
+\end{document}

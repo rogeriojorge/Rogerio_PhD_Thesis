@@ -1,0 +1,1018 @@
+\chapter{Full Coulomb Gyrokinetic Collision Operator in the Moment Expansion}
+\label{ch:op}
+
+Due to the lower temperature values and associated high collisionality with respect to the core, the use of a gyrokinetic model to simulate the plasma dynamics in the tokamak periphery requires an accurate collision operator.
+%
+In fact, collisions set the level of neoclassical transport and strongly influence the turbulent dynamics by affecting the linear growth rate and nonlinear evolution of turbulent modes \citep{Hirshman1981,Lin1999,Barnes2009}.
+%
+Since the first formulations of the gyrokinetic theory, there have been significant research efforts to take collisions into account \citep{Catto1977,Brizard2004,Abel2008,Barnes2009,Li2011,Esteve2015}.
+%
+The first effort devoted to a gyrokinetic collision operator can be traced back to the work of \citet{Catto1977}, later improved by \citet{Abel2008} by adding the terms needed to ensure non-negative entropy production.
+%
+These works lead to a linearized gyrokinetic collision operator model was proposed that contained pitch-angle scattering effects and important conservation properties.
+%
+A linearized gyrokinetic Coulomb collision operator derived from first principles was then presented in \citet{Li2011} and \citet{Madsen2013a}.
+
+%Nonlinear GK Collisions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+As turbulence in the tokamak periphery region is essentially nonlinear and the level of collisions is not sufficient for a local thermalization, the distribution function may significantly deviate from a local Maxwellian distribution \citep{Tskhakaya2012}.
+%
+Therefore, a nonlinear full-F formulation of the gyrokinetic collision operator is crucial to adequately describe the dynamics in this region.
+%
+Only recently several theoretical studies have emerged in order to derive full-F collisional gyrokinetic models that keep conservation laws in their differential form, by providing a Poisson bracket formulation of the full nonlinear Coulomb collision operator \citep{Brizard2004,Sugama2015,Burby2015}.
+%
+However, the presence of a six-dimensional phase-space integral in these formulations of the nonlinear Coulomb collision operator makes their numerical implementation still extremely difficult.
+
+%This work and ordering
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+In this chapter, the gyrokinetic Coulomb collision operator is derived in the gyrokinetic regime in terms of a two-dimensional velocity integral only, that can be efficiently implemented in numerical simulation codes.
+%
+The derivation of the full Coulomb collision operator described here is based on a multipole expansion of the Rosenbluth potentials.
+%
+This allows us to write the Coulomb collision operator in terms of moments of the distribution function and apply the gyroaverage operator to the resulting expansion.
+%
+The Coulomb collision operator and its moments are then expressed in terms of two-dimensional ($\overline v_\parallel$ and $\overline \mu$) integrals of the  distribution function.
+%
+We show that the gyroangle dependence of the expansion coefficients can be given in terms of scalar spherical harmonics $Y_{lm}(\varphi,\theta)$ with $\varphi$ and $\theta$ the polar and the azimuthal (gyroangle) respectively.
+%
+This allows the gyroaverage integrations to be performed analytically at arbitrary values of the perpendicular wavevector $\mathbf k_\perp$.
+%
+Furthermore, inline with the previous chapters, the distribution function is expanded in a Hermite-Laguerre polynomial basis, and the Coulomb collision operator is projected on the same basis.
+
+This chapter is organized as follows. 
+%
+\cref{sec:ordering1} derives the gyrokinetic equation up to second order in $\epsilon$ including collisional dynamics, and \cref{sec:gcmodel} presents the multipole expansion of the Coulomb collision operator.
+%
+In \cref{sec:gudingcentertransf}, the Coulomb operator is ported to a gyrocenter coordinate system, while \cref{eq:hermlag} makes use of the Hermite-Laguerre polynomial basis to obtain a closed form expression for the gyrocenter velocity moments of the Coulomb collision operator.
+%
+The moment expansion of the unlike-species gyrokinetic collision operator is presented in \cref{sec:smallmassratio} using an expansion based on the smallness of the electron-to-ion mass ratio.
+%
+The conclusions follow.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gyrokinetic Collisional Ordering}
+\label{sec:ordering1}
+
+The evolution of the gyrokinetic distribution function $\left<\overline{F_a}\right>$ is given by the gyrokinetic equation, \cref{eq:boltzmanngk1}.
+%
+We note that the collisional term decouples the evolution of $\left<\overline F_a\right>_{\gyR}$ a $\overline F_a$.
+%
+To make further progress, we estimate the order of magnitude of the gyrophase dependent part of the distribution function $\widetilde{\overline{F_a}} =\overline{F_a} - \left< \overline{F_a} \right>_{\overline{\mathbf{R}}}$, where $\overline{F_a}$ obeys \cref{eq:boltzmannSSgk} and $\left< \overline{F_a} \right>_{\overline{\mathbf{R}}}$ \cref{eq:boltzmanngk1}.
+%
+In order to estimate the amplitude of $\widetilde{\overline{F_a}}$, we note that the equation for the evolution of $\widetilde{\overline{ F_a}}=\overline{F_a}-\left< \overline{F_a} \right>_{\overline{\mathbf{R}}}$ can be obtained by subtracting \cref{eq:boltzmanngk1} from \cref{eq:boltzmannSSgk}, yielding
+%
+\begin{equation}
+    \frac{\partial \widetilde{\overline{ F_a}}}{\partial t} + \dot{\overline {\mathbf R}} \cdot \frac{\partial \widetilde{\overline{ F_a}}}{\partial \overline {\mathbf R}} +\dot{\overline {v_\parallel}} \frac{\partial \widetilde{\overline{ F_a}}}{\partial \overline {v_\parallel}}+\dot{\overline {\theta}} \frac{\partial \widetilde{\overline{ F_a}}}{\partial \overline {\theta}} = \sum_b C(\overline{F_a},\overline{F_b})-\left<C(\overline{F_a},\overline{F_b})\right>_{\overline{\mathbf{R}}}.
+\label{eq:gykboltz1}
+\end{equation}
+%
+To lowest order, $\dot{\overline {\theta}} \partial_\theta \widetilde{\overline{F_a}} \sim \Omega_a \widetilde{\overline{F_a}} $ and $\partial_t \sim \dot{\overline {\mathbf R}} \cdot \nabla_{ \overline {\mathbf R}}\sim \dot{\overline{v_\parallel}}\partial_{{\overline{v_\parallel}}}\sim \epsilon \Omega_i$.
+%
+The estimate of the collisional term on the right-hand side of \cref{eq:gykboltz1} is more delicate.
+%
+Ordering $C(\overline{F_a},\overline{F_b}) = C_0(\overline{F_a},\overline{F_b}) + \epsilon_\delta C_1(\overline{F_a},\overline{F_b})+...$ with $C_0(\overline{F_a},\overline{F_b}) \sim \nu_a \overline{F_a}$, and noting that the first order gyrocenter transformation $\mathbf Z_1$ in \cref{eq:gyrotransf} is mass dependent (i.e., $\overline{g}_{1e}^\nu \sim  \overline{g}_{1i}^\nu\sqrt{m_e/m_i}$), the magnitude of the Coulomb collision operator for electrons can be estimated as
+%
+\begin{equation}
+    C(\overline F_e,\overline{F_b}) \sim \nu_e \overline F_e(\overline{\mathbf Z}) \sim \epsilon_\nu \Omega_i \overline F_e(\mathbf Z)+O\left[\epsilon \epsilon_\delta \sqrt{\frac{m_e}{m_i}}\Omega_i \overline F_e(\mathbf Z)\right].
+\label{eq:orderingcfe}
+\end{equation}
+%
+A similar argument holds for the ions, yielding
+%
+\begin{equation}
+    C(\overline F_i,\overline{F_b}) \sim \nu_i \overline F_i(\overline{\mathbf Z}) \sim \sqrt{\frac{m_e}{m_i}}\nu_e \overline{F_i}(\overline{\mathbf Z})\sim \sqrt{\frac{m_e}{m_i}}\epsilon_\nu \Omega_i \overline F_i(\mathbf Z) +O\left[\epsilon \epsilon_\delta \sqrt{\frac{m_e}{m_i}}\Omega_i \overline F_i(\mathbf Z)\right].
+\label{eq:orderingcfi}
+\end{equation}
+%
+Equations (\ref{eq:orderingcfe}) and (\ref{eq:orderingcfi}) show that the lowest order collision operator $C_0(\overline{F_a},\overline{F_b})$ is, in fact, $O(\epsilon^2)$, as the next term in the expansion of $C(\overline{F_a},\overline{F_b})$ is $O(\epsilon^2 \sqrt{m_e/m_i})$.
+%
+Therefore, in this chapter, when describing the $\overline{\mathbf Z}$ dependence of the distribution function $\overline F_a$ and $\overline F_b$ in the collision operator $C(\overline F_a,\overline F_b)$, we use the lowest order approximation $\overline{ \mathbf Z} \simeq \mathbf Z$.
+%
+Using the orderings of \cref{eq:orderingcfi,eq:orderingcfe}, we obtain
+%
+\begin{equation}
+    \frac{\widetilde {\overline F_e}}{\left< \overline F_e \right>_{\overline{\mathbf{R}}}} \sim \frac{m_e}{m_i}\epsilon_\nu<\epsilon^2,
+    \label{eq:orderingftildee1}
+\end{equation}
+%
+and
+%
+\begin{equation}
+    \frac{\widetilde {\overline F_i}}{\left< \overline F_i \right>_{\overline{\mathbf{R}}}} \sim \sqrt{\frac{m_e}{m_i}}\epsilon_\nu<\epsilon^2.
+    \label{eq:orderingftildei1}
+\end{equation}
+%
+showing that, up to second order in $\epsilon$, the gyroangle dependence of the distribution function can be neglected in \cref{eq:boltzmanngk1}.
+%
+We remark that a similar estimate for the gyrophase dependent part of the guiding-center distribution function $F_a$ was found in \cref{eq:orderingftildee,eq:orderingftildei}.
+%
+Therefore, a leading order estimate of \cref{eq:gykboltz1} leads to
+%
+\begin{equation}
+    \widetilde {\overline{F_a}} \sim \frac{1}{\Omega_a} \sum_b \int_0^{\overline \theta} \left[C_0\left(\left<\overline{F_a}\right>_{\overline{\mathbf{R}}},\left<\overline{F_b}\right>_{\overline{\mathbf{R}}}\right)-\left<C_0\left(\left<\overline{F_a}\right>_{\overline{\mathbf{R}}},\left<\overline{F_b}\right>_{\overline{\mathbf{R}}}\right)\right>_{\overline{\mathbf{R}}}\right]d{\overline{\theta}'}.
+\end{equation}
+%
+Finally, by taking $\dot{\overline {\mathbf R}}$ and $\dot{\overline {v_\parallel}}$ to be at most $O(\epsilon^2)$ accurate, the gyrokinetic equation valid up to second order in $\epsilon$ can be written as
+%
+\begin{equation}
+    \frac{\partial}{\partial t}\left< \overline{F_a} \right>_{\overline{\mathbf{R}}} + \dot{\overline {\mathbf R}} \cdot \frac{\partial }{\partial \overline {\mathbf R}}\left<\overline{F_a}\right>_{\overline{\mathbf{R}}}+ \dot{\overline {v_\parallel}} \frac{\partial}{\partial \overline {v_\parallel}}\left<\overline{F_a}\right>_{\overline{\mathbf{R}}} = \sum_b \left< C_0(\left<\overline{F_a}\right>_{\overline{\mathbf{R}}},\left<\overline{F_b}\right>_{\overline{\mathbf{R}}})\right>_{\overline{\mathbf{R}}}.
+\label{eq:boltzmannfinal}
+\end{equation}
+%
+We note that although in \cref{eq:boltzmannfinal} only the lowest order in $\epsilon_\delta$ collision operator is used, i.e., $C_0(\left<\overline{F_a}\right>_{\overline{\mathbf{R}}},\left<\overline{F_b}\right>_{\overline{\mathbf{R}}})$, all orders in $k_\perp \rho_s$ are kept.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Multipole Expansion of the Coulomb Collision Operator}
+\label{sec:gcmodel}
+
+The goal of this section is to find a suitable basis to expand $f_a$ such that the Coulomb operator in \cref{eq:coulombop} can be cast into a sum of moments of $f_a$.
+%
+We start by noting that the Rosenbluth potential $H_b$ in \cref{eq:roshb} is analogous to the expression of the electrostatic potential due to a charge distribution, a similarity already noted by \citet{Rosenbluth1957}.
+%
+This fact allows us to make use of known electrostatic expansion techniques \citep{Jackson1999} to perform a multipole expansion of the Rosenbluth potentials.
+%
+We first Taylor expand the factor $1/|\mathbf v - \mathbf v'|$ in \cref{eq:roshb} around $\mathbf v=0$ if $v\le v'$ or around $\mathbf v'=0$ if $v>v'$, yielding
+%
+\begin{equation}
+\frac{1}{|\mathbf v - \mathbf v'|} =
+\begin{cases}
+    \mathlarger{\sum}\limits_{l=0}^\infty \dfrac{(-\mathbf v')^l}{l!} \cdot \dfrac{\partial^l}{\partial {\mathbf v}^l} \left(\dfrac{1}{v}\right), &v'\le v,\\
+    \mathlarger{\sum}\limits_{l=0}^\infty \dfrac{(-\mathbf v)^l}{l!} \cdot \dfrac{\partial^l}{\partial {(\mathbf v')}^l} \left(\dfrac{1}{v'}\right), &v<v'.\\
+\end{cases}
+\end{equation}
+%
+where we used the identity $\partial_{\mathbf v}(1/|\mathbf v - \mathbf v'|)_{v=0}=-\partial_{\mathbf v'}(1/v')$.
+%
+Both $v\le v'$ and $v>v'$ cases are included in order to take into account the fact that $f_b(\mathbf v')$ is, in general, finite over the entire velocity space $\mathbf v'$.
+%
+Denoting $\mathbf Y^{l}(\mathbf v)$ the spherical harmonic tensor \citep{Weinert1980}
+%
+\begin{equation}
+    \mathbf Y^{l}(\mathbf v) = \frac{(-1)^l v^{2l+1}}{(2l-1)!!}\left(\frac{\partial}{\partial \mathbf v}\right)^l \frac{1}{v},
+\label{eq:yltensor}
+\end{equation}
+%
+we obtain the following form for $H_b$
+%
+\begin{equation}
+    H_b = 2 \sum_{l=0}^\infty \frac{(2l-1)!!}{l!} \left(\int_{v>v'} f_b(\mathbf v') \frac{(\mathbf v')^l}{v^{2l+1}} \cdot \mathbf Y^{l}(\mathbf v)  d\mathbf v'+\int_{v'\ge v} f_b(\mathbf v') \frac{(\mathbf v)^l}{(v')^{2l+1}} \cdot \mathbf Y^{l}(\mathbf v')  d\mathbf v'\right).
+\label{eq:roshb1}
+\end{equation}
+
+In order to simplify \cref{eq:roshb1}, we note that the tensor $\mathbf Y^{l}(\mathbf v)=Y_{\alpha \beta ... \gamma}^l(\mathbf v)$ is symmetric and totally traceless, i.e., traceless between any combination of two of its indices.
+%
+Symmetry arises from the fact that the indices in $Y_{\alpha \beta ... \gamma}^l(\mathbf v)$ are interchangeable as the velocity derivatives commute for $v \not= 0$.
+%
+The traceless feature, i.e., $\sum_\alpha Y_{\alpha \alpha ... \gamma}^l(\mathbf v)=0$ between any pairs of indices, stems from the fact that the contraction between any two indices in $Y_{\alpha \beta ... \gamma}^l(\mathbf v)$ leads to the multiplicative factor $\nabla_{\mathbf v}^2=\partial_{\mathbf v}\cdot \partial_{\mathbf v} (1/v)$ which vanishes for $v\not=0$.
+%
+In the reasoning above, we exclude the value of $v=0$ since the classical distance of closest approach should be smaller than the Debye length, which effectively limits the maximum impact parameter (hence the minimum velocity) for small-angle deflections in the plasma \citep{Li2011}.
+%
+Furthermore, by defining the tensor $(\mathbf v)^l_{\text{TS}}$ as the traceless symmetric counterpart of $(\mathbf v)^l$ [e.g., $(\mathbf v)^2_{\text{TS}}=\mathbf v \mathbf v - \mathbf I v^2/3$ with $\mathbf I$ the identity matrix], we replace the tensors $(\mathbf v')^l$ and $(\mathbf v)^l$ in \cref{eq:roshb1} by their traceless symmetric counterpart $(\mathbf v')^l_{\text{TS}}$ and $(\mathbf v)^l_{\text{TS}}$ respectively
+%
+\begin{equation}
+    H_b = 2 \sum_{l=0}^\infty \frac{(2l-1)!!}{l!} \left(\int_{v>v'} f_b(\mathbf v') \frac{(\mathbf v')^l_{\text{TS}}}{v^{2l+1}} \cdot \mathbf Y^{l}(\mathbf v)  d\mathbf v'+\int_{v'\ge v} f_b(\mathbf v') \frac{(\mathbf v)^l_{\text{TS}}}{(v')^{2l+1}} \cdot \mathbf Y^{l}(\mathbf v')  d\mathbf v'\right),
+\label{eq:roshb11}
+\end{equation}
+%
+as they differ only by terms proportional to the identity matrix that vanish when summed with $\mathbf Y^{l}(\mathbf v)$ and $\mathbf Y^{l}(\mathbf v')$ [e.g., $(\mathbf v^2-(\mathbf v)^2_{\text{TS}})\cdot \mathbf Y^2(\mathbf v)=(v^2/3)\mathbf I \cdot \mathbf Y^2(\mathbf v)=(v^2/3) \sum_\alpha Y^2_{\alpha \alpha} =0$].
+%
+Finally, we relate the tensors $(\mathbf v)^l_{\text{TS}}$ and $\mathbf Y^{l}(\mathbf v)$.
+%
+For $l=0$ and $l=1$, we have $\mathbf Y^{0}(\mathbf v')=(\mathbf v')^0_{\text{TS}}=1$ and $\mathbf Y^{1}(\mathbf v')=(\mathbf v')^1_{\text{TS}}=\mathbf v'$.
+%
+For $l=2$, applying \cref{eq:yltensor}, we obtain
+%
+\begin{equation}
+\begin{split}
+    \mathbf Y^2(\mathbf v') &= \mathbf v' \mathbf v' - \frac{v'^2}{3}\mathbf I=(\mathbf v')^2_{TS}.
+\end{split}
+\label{eq:yl2}
+\end{equation}
+%
+The results obtained for $l=0,1$ and 2 can be generalized, i.e., $(\mathbf v')^l_{\text{TS}}=\mathbf Y^{l}(\mathbf v')$ as proved by induction \citep{Weinert1980}.
+%
+The Rosenbluth potential $H_b$ can therefore be written as
+%
+\begin{equation}
+    H_b = 2 \sum_{l=0}^\infty \frac{(2l-1)!!}{l!}\mathbf Y^{l}(\mathbf v) \cdot \left[\frac{1}{(v^{2})^{l+1/2}} \int_{v'<v} f_b(\mathbf v') \mathbf Y^{l}(\mathbf v') d\mathbf v'+ \int_{v'\ge v} f_b(\mathbf v') \frac{\mathbf Y^{l}(\mathbf v')}{[(v')^{2}]^{l+1/2}}  d\mathbf v'\right].
+\label{eq:roshb2}
+\end{equation}
+%
+The first term in \cref{eq:roshb2} can be regarded as the potential due to the charge distribution $f_b(\mathbf v')$ inside a sphere of radius $v$, while the second term is the potential due to a finite charge distribution $f_b(\mathbf v')$ at $v'\ge v$.
+
+We now look for an expansion of $f_b$ that allows us to perform the integrals in \cref{eq:roshb2} analytically by writing $H_b$ as a sum of velocity moments of $f_b$.
+%
+We consider the basis functions
+%
+\begin{equation}
+    \mathbf Y^{lk}(\mathbf v) = \mathbf Y^{l}\left(\mathbf v\right) L_k^{l+1/2}(v),
+\end{equation}
+%
+with $L_k^{l+1/2}(v)$ an associated Laguerre polynomial.
+%
+The basis $\mathbf Y^{lk}(\mathbf v)$ is orthogonal, with its orthogonality relation given by \citep{Banach1989,Snider2018}
+%
+\begin{equation}
+    \int e^{-v^2} \mathbf Y^{l'k'}(\mathbf v) \mathbf Y^{lk}(\mathbf v) d \mathbf v \cdot {\mathbf T^{lk}}= \delta_{ll'}\delta_{kk'} \pi^{3/2} \sigma_{k}^l {\mathbf T^{lk}},
+\label{eq:orthoy}
+\end{equation}
+%
+where $\mathbf T^{lk}$ is an arbitrary symmetric and traceless tensor, and $\sigma_k^l$ a normalization constant
+%
+\begin{equation}
+    \sigma_k^l=\frac{l!(l+k+1/2)!}{2^l(l+1/2)!k!}.
+\end{equation}
+%
+A proof that $\mathbf Y^{lk}(\mathbf v)$ is also a complete basis can be found in \citet{Banach1989}, where the equivalence between Grad's moment expansion in tensorial Hermite polynomials (which forms a complete basis) and $\mathbf Y^{lk}(\mathbf v)$ was shown.
+%
+We then write $f_b$ as
+%
+\begin{equation}
+    f_b = f_{Mb}\sum_{l,k=0}^{\infty} \mathbf Y_b^{lk}\left(\frac{\mathbf v}{v_{thb}}\right) \cdot \frac{\mathbf M_b^{lk}}{\sigma_{k}^l},
+\label{eq:faexp}
+\end{equation}
+%
+with $f_{Mb}$ a Maxwellian
+%
+\begin{equation}
+    f_{Mb}=\frac{n_b e^{-\frac{v^2}{v_{thb}^2}}}{v_{thb}^3 \pi^{3/2}},
+\end{equation}
+%
+and, according to \cref{eq:orthoy}, the coefficients $\mathbf M^{lk}_b$ obtained by taking velocity moments of $f_b$ of the form
+%
+\begin{equation}
+    \mathbf M^{lk}_b=\frac{1}{n_b}\int f_b(\mathbf v) \mathbf Y_b^{lk}\left(\frac{\mathbf v}{v_{thb}}\right) d\mathbf v.
+\label{eq:defmaln}
+\end{equation}
+%
+Finally, we note that \cref{eq:faexp} allows us to retain only the $l=k=0$ moment in  when the plasma is in thermal equilibrium.
+
+Plugging the expansion for $f_b$ of \cref{eq:faexp} in \cref{eq:roshb2}, the following expression for $H_b$ is obtained
+%
+\begin{align}
+    H_b &= \frac{n_b}{v_{thb} \pi^{3/2}} \sum_{l,l',k} \frac{(2l-1)!!}{l!\sigma_k^{l'}}\nonumber\\
+    &\times\left(\frac{\mathbf Y^{l}(\hat v)}{x_b^{(l+1)/2}} \cdot \int_{0}^{x_b} e^{-x} L_k^{l'+1/2}(x) x^{(l+l'+1)/2} dx \int \mathbf Y^{l}(\hat v')\mathbf Y^{l'}(\hat v') d\sigma' \cdot \mathbf M_b^{l'k}\right.\nonumber\\
+    &\left.+x_b^{l/2} \mathbf Y^{l}(\hat v) \cdot \int_{x_b}^{\infty} e^{-x}L_k^{l+1/2}(x) dx \int \mathbf Y^{l}(\hat v')\mathbf Y^{l'}(\hat v') d\sigma' \cdot \mathbf M_b^{l'k}\right),
+\label{eq:roshb3}
+\end{align}
+%
+where we define $x_b=v^2/v_{thb}^2$ the normalized velocity, $\sigma$ the solid angle such that $d \mathbf v = v^2 dv d\sigma$, and use the relation $\mathbf Y^{l} \mathbf (v) = v^l \mathbf Y^l(\hat v)$ with $\mathbf v = v \hat v$ \citep{Weinert1980}.
+%
+We note that $\mathbf Y^l(\hat v)$ and $\mathbf Y^l(\mathbf v)$ are species independent, and therefore the species subscript is suppressed.
+%
+Applying the orthogonality relation of \cref{eq:orthoy} for $k=0$, and expanding the associated Laguerre polynomials using \cref{eq:asslaguerre}, we write $H_b$ as
+%
+\begin{align}
+    H_b &= \frac{2n_b}{v_{thb}} \sum_{l,k} \sum_{m=0}^k \frac{L_{km}^{l}}{\sigma_k^l}\frac{\mathbf Y^{l}(\hat v) \cdot \mathbf M_b^{lk}}{2l+1} \nonumber\\
+    &\times\frac{1}{\sqrt{\pi}}\left(\frac{1}{x_b^{(l+1)/2}} \int_{0}^{x_b} e^{-x} x^{m+l+1/2} dx+x_b^{l/2} \int_{x_b}^{\infty} e^{-x}x^m dx\right),
+\label{eq:roshb4}
+\end{align}
+%
+where the identity
+%
+\begin{equation}
+    \frac{(2l-1)!!}{2^l (l+1/2)!}=\frac{2}{\sqrt{\pi}}\frac{1}{2l+1},
+\end{equation}
+%
+is used to simplify \cref{eq:roshb4}.
+
+The expression of $H_b$ in \cref{eq:roshb4} corresponds to the one in \citet{Ji2006}, having replaced the $\mathbf Y^l(\mathbf v)$ tensors by the $\mathbf P^l(\mathbf v)$ tensors which are defined by the recursion relation [see Eq. (14) of \citet{Ji2006}]
+%
+\begin{equation}
+    \mathbf P^{l+1}(\mathbf v) = \mathbf v \mathbf P^{l}(\mathbf v) -\frac{v^2}{2l+1}\frac{\partial}{\partial \mathbf v}\mathbf P^{l}(\mathbf v),
+\label{eq:recpl}
+\end{equation}
+%
+with $\mathbf P^0(\mathbf v)=1$ and $\mathbf P^1(\mathbf v)=\mathbf v$.
+%
+We can indeed prove that $\mathbf Y^l(\mathbf v) = \mathbf P^l (\mathbf v)$ by deriving the tensor $\mathbf Y^{l}(\mathbf v)$ using \cref{eq:yltensor}, yielding
+%
+\begin{align}
+    \frac{\partial}{\partial \mathbf v}\mathbf Y^l(\mathbf v) &= \frac{(-1)^l}{(2l-1)!!}\left[(2l+1)v^{2l-1}\mathbf v \frac{\partial^l}{\partial \mathbf v^l}\frac{1}{v}+v^{2l+1}\frac{\partial^{l+1}}{\partial \mathbf v^{2l+1}}\frac{1}{v}\right]\nonumber\\
+    &=\frac{2l+1}{v^2}\left[\mathbf v \frac{v^{2l+1}(-1)^l}{(2l-1)!!}\frac{\partial^l}{\partial \mathbf v^l}\frac{1}{v}-\frac{(-1)^{l+1}v^{2(l+1)+1}}{(2l+1)!!}\frac{\partial^{l+1}}{\partial \mathbf v^{l+1}}\frac{1}{v}\right]\nonumber\\
+    &=\frac{2l+1}{v^2}\left[\mathbf v \mathbf Y^l(\mathbf v)-\mathbf Y^{l+1}(\mathbf v)\right].
+\label{eq:recyl}
+\end{align}
+%
+Equation (\ref{eq:recyl}) is the same recursion relation as \cref{eq:recpl}.
+%
+As $\mathbf Y^{0}(\mathbf v)= \mathbf P^0(\mathbf v) = 1$ and $\mathbf Y^{1}(\mathbf v)=\mathbf P^1(\mathbf v) = \mathbf v$, the proof is complete.
+
+The integrals in \cref{eq:roshb4} can be put in terms of lower
+%
+\begin{equation}
+    I_-^k=\frac{1}{\sqrt{\pi}}\int_0^{x_b} dx e^{-x} x^{(k-1)/2},
+\end{equation}
+%
+and upper
+%
+\begin{equation}
+    I_+^k=\frac{1}{\sqrt{\pi}}\int_{x_b}^{\infty} dx e^{-x} x^{(k-1)/2},
+\end{equation}
+%
+incomplete gamma functions \citep{Abramowitz1972}, yielding
+%
+\begin{equation}
+    H_b = \frac{2n_b}{v_{thb}} \sum_{l,k} \sum_{m=0}^k \frac{L_{km}^{l}}{\sigma_k^l}\frac{\mathbf Y^{l}(\hat v) \cdot \mathbf M_b^{lk}}{2l+1} \left(\frac{I_+^{2l+2m+2}}{x_b^{(l+1)/2}}+x_b^{l/2}I_-^{2m+1}\right).
+\label{eq:roshb5}
+\end{equation}
+%
+A procedure similar to the one used to obtain \cref{eq:roshb5} can be followed for $G_b$ by expanding the distribution function $f_b$ appearing in the second Rosenbluth potential $G_b$ and using  \cref{eq:faexp}, therefore obtaining
+%
+\begin{equation}
+\begin{split}
+    G_b &= \frac{2n_b}{v_{thb}} \sum_{l,k} \sum_{m=0}^k \frac{L_{km}^{l}}{\sigma_k^l}\frac{\mathbf Y^{l}(\hat v) \cdot \mathbf M_b^{lk}}{2l+1}\left[\frac{1}{2l+3} \left(\frac{I_+^{2l+2m+4}}{x_b^{(l+1)/2}}+x_b^{l/2+1}I_-^{2m+1}\right)\right.\\
+    &\left.-\frac{1}{2l-1}\left(\frac{I_+^{2l+2m+2}}{x_b^{(l-1)/2}}+x_b^{l/2}I_-^{2m+3}\right)\right].
+\end{split}
+\label{eq:rosgb1}
+\end{equation}
+
+Having derived a closed form expression for the Rosenbluth potentials, we now turn to the full Coulomb collision operator.
+%
+We first note that, although the Rosenbluth potentials $H_b$ and $G_b$ are linear functions of $f_b$, the Coulomb collision operator is, in fact, bilinear in $f_a$ and $f_b$.
+%
+In order to rewrite the Coulomb collision operator in \cref{eq:coulombop} in terms of a single spherical harmonic tensor $\mathbf Y^l(\mathbf v)$, we make use of the following identity between symmetric traceless tensors \citep{Ji2009}
+%
+\begin{equation}
+    [\mathbf Y^{l-u}(\hat v) \cdot \mathbf M_a^{lk}]\cdot^u [\mathbf Y^{n-u}(\hat v) \cdot \mathbf M_a^{nk}]=\sum_{i=0}^{min(l,n)-u}d_i^{l-u,n-u}\mathbf Y^{l+2n-2(i+u)}(\hat v) \cdot \left({\mathbf M_a^{lk} \cdot^{i+u} \mathbf M_b^{nq}}\right)_{TS},
+\label{eq:identityyln}
+\end{equation}
+%
+where $\cdot^n$ is the $n$-fold inner product [e.g., for the matrix $\mathbf A = A_{ij}$, $(\mathbf A \cdot^1 \mathbf A)_{ij} = \sum_k A_{ki}A_{kj}$].
+%
+The $d_i^{l,n}$ coefficient can be written in terms of the coefficient
+%
+\begin{equation}
+    t_i^{l,n}=\frac{l!n!(-2)^i(2l+2n-2i)!(l+n)!}{(2l+2n)!i!(l-i)!(n-i)!(l+n-i)!},
+\end{equation}
+%
+as
+%
+\begin{equation}
+    d_i^{l,n}=\sum_{i_j|\sum_{j=1}^hi_j=i}(-1)^h\prod_{j=1}^h t_{i_j}^{l-\sum_{g=1}^{j-1}i_g,n-\sum_{g=1}^{j-1}i_g}.
+\end{equation}
+%
+Expanding $f_a$ and $f_b$ using \cref{eq:faexp}, the expression for the Rosenbluth potentials in \cref{eq:roshb5,eq:rosgb1}, and the identity in \cref{eq:identityyln}, the collision operator in \cref{eq:coulombop} can be rewritten in terms of products of $\mathbf M_a^{lk}$ and $\mathbf M_b^{lk}$, as shown in \cref{eq:JiCab}, that is
+%
+\begin{equation}
+\begin{split}
+    C(f_a,f_b)&=f_{aM}\sum_{l,k,n,q=0}^\infty\sum_{m=0}^k\sum_{r=0}^{q}\frac{L_{km}^l}{\sigma_k^l}\frac{L_{qr}^n}{\sigma_q^n} c_{ab}^{lkmnqr},
+\end{split}
+\label{eq:JiCab1}
+\end{equation}
+%
+with
+%
+\begin{equation}
+    c_{ab}^{lkmnqr}=\sum_{u=0}^{\text{min}(2,l,n)}\nu_{*abu}^{lm,nr}(v^2)\sum_{i=0}^{min(l,n)-u}d_i^{l-u,n-u}\mathbf Y^{l+2n-2(i+u)}(\hat v) \cdot \left({\mathbf M_a^{lk} \cdot^{i+u} \mathbf M_b^{nq}}\right)_{TS}.
+\label{eq:ccjiheld1}
+\end{equation}
+%
+The quantity $\nu_{*abu}^{lm,nr}$ consists of a linear combination of $I_+^l$ and $I_-^l$ integrals and its derivatives, which can be written as linear combinations of the error function and its derivatives.
+%
+Their expressions are reported in \citet{Ji2009}.
+%
+Equation (\ref{eq:ccjiheld1}) corresponds to \cref{eq:ccjiheld} with $Y^{l+2n-2(i+u)}(\hat v)$ replaced by $P^{l+2n-2(i+u)}(\hat v)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gyrokinetic Coulomb Collision Operator}
+\label{sec:gudingcentertransf}
+
+In \cref{sec:gcmodel}, the Coulomb collision operator is cast in terms of velocity moments of the multipole expansion of the particle distribution function $f$.
+%
+We now express it in terms of the gyrokinetic distribution function $\left< \overline{F_a} \right>_{\gyR}$.
+%
+As a first step, the gyroangle dependence of the basis functions $\mathbf Y^{lk}$ is found explicitly by using a coordinate transformation from particle phase-space coordinates $(\mathbf x, \mathbf v)$  to the guiding-center coordinate system $\mathbf Z$.
+%
+This allows us to decouple the fast gyromotion time associated with the gyroangle $\theta$ from the typical plasma turbulence time scales.
+%
+The multipole moments $\mathbf M^{lk}$ can then be written in terms of guiding-center velocity moments of the guiding-center distribution function $\left< F_a \right>_{\gyR}$ for arbitrary values of $k_\perp \rho_s$.
+%
+As a second step, the gyrocenter coordinate system $\overline{\mathbf Z}$ is introduced by using the coordinate transformation $T$ of \cref{eq:gyrotransf}.
+%
+As shown in \cref{sec:ordering1}, up to second order in $\epsilon$, only the lowest order collision operator $C_0$ needs to be retained.
+%
+This allows us to straightforwardly obtain the gyrokinetic collision operator from the guiding-center one by a simple coordinate relabeling.
+
+We first derive the polar and azimuthal angle (gyroangle) dependence of the $\mathbf Y^l(\mathbf v)$ tensor in terms of scalar spherical harmonics.
+%
+This is useful to analytically perform the gyroaverage of the collision operator in the Boltzmann equation, \cref{eq:boltzmannfinal}.
+%
+We first show that the Laplacian of $\mathbf Y^l(\mathbf v)$ vanishes, i.e., that $\mathbf Y^l(\mathbf v)$ are harmonic tensors.
+%
+By applying the operator $\nabla_{\mathbf v}^2$ to $ \mathbf Y^{l}(\mathbf v)$ defined in \cref{eq:yltensor}, and recalling that $\nabla_{\mathbf v}^2 (1/v) = 0$ for $v\not=0$, we obtain
+%
+\begin{equation}
+    \nabla_{\mathbf v}^2 \mathbf Y^{l}(\mathbf v) = \frac{2(-1)^l(2l+1)v^{2l+1}}{(2l-1)!!}\left[(l+1)\left(\frac{\partial}{\partial \mathbf v}\right)^l\frac{1}{v}+\mathbf v \cdot \left(\frac{\partial}{\partial \mathbf v}\right)^{l+1}\frac{1}{v}\right]=0,
+\label{eq:laplyl}
+\end{equation}
+%
+since
+%
+\begin{equation}
+    \mathbf v \cdot \left(\frac{\partial}{\partial \mathbf v}\right)^{l+1}\frac{1}{v} = - (l+1)\left(\frac{\partial}{\partial \mathbf v}\right)^l\frac{1}{v},
+\end{equation}
+%
+as can be proved by induction \citep{Weinert1980}.
+%
+The angular dependence of $\mathbf Y^{l}(\mathbf v)$ can be found by expressing the Laplacian of \cref{eq:laplyl} in spherical coordinates.
+%
+Using the fact that $\mathbf Y^l(\mathbf v) = v^l \mathbf Y^l(\hat v)$, we obtain
+%
+\begin{align}
+    0 &= \nabla_{\mathbf v}^2 \mathbf Y^{l}(\mathbf v)=\nabla^2_{\mathbf v}[v^l \mathbf Y^l(\hat v)]\nonumber\\
+      &= \mathbf Y^{l}(\hat v)\left(\frac{\partial^2}{\partial v^2} + \frac{2}{v}\frac{\partial}{\partial v}\right)v^l - v^{l-2} L^2 \mathbf Y^l(\hat v),
+\label{eq:nabla2yl}
+\end{align}
+%
+where $L^2$ is the angular part of $\nabla^2_{\mathbf v}$ multiplied by $v^2$
+%
+\begin{equation}
+    L^2 = \frac{1}{\sin \varphi}\frac{\partial}{\partial \varphi}\left(\sin \varphi \frac{\partial}{\partial \varphi}\right)+\frac{1}{\sin \varphi^2}\frac{\partial^2}{\partial \theta^2},
+\end{equation}
+%
+with $\varphi$ and $\theta$ that can be chosen to correspond to the pitch and the gyroangle, respectively, defined in \cref{eq:GCcoordinates}.
+%
+Performing the scalar $v$ derivatives in \cref{eq:nabla2yl}, the following differential equation for $\mathbf Y^l(\mathbf v)$ is obtained
+%
+\begin{equation}
+    L^2 \mathbf Y^l(\hat v) = l(l+1) \mathbf Y^l(\hat v).
+\label{eq:l2yl}
+\end{equation}
+%
+We identify \cref{eq:l2yl} as the eigenvalue equation for the scalar spherical harmonics $Y_{lm}(\varphi, \theta)$ \citep{Arfken2013}.
+%
+Therefore, using \cref{eq:l2yl}, and denoting $\mathbf e^{l m}$  the basis elements of $\mathbf Y^l(\mathbf v)$ (an elementary derivation of the basis tensors $\mathbf e^{l m}$ is shown in \cref{app:basistensors}), we write $\mathbf Y^{l}(\mathbf v)$ as
+%
+\begin{equation}
+    \mathbf Y^{l}(\mathbf v) = v^l \sqrt{\frac{ 2 \pi^{3/2}  l!}{2^l (l+1/2)!}}\sum_{m=-l}^lY_{lm}(\varphi,\theta)\mathbf e^{l m}.
+\label{eq:ylvfull}
+\end{equation}
+
+Having derived the gyroangle dependence of the $\mathbf Y^{l}(\mathbf v)$ tensors, we now compute the fluid moments $\mathbf M_a^{lk}$ in terms of $v_\parallel$ and $\mu$ moments of the guiding-center distribution function $\left<F_a\right>$.
+%
+We first consider a vanishing Larmor radius $\rho=0$.
+%
+Using \cref{eq:defmaln} and considering that, up to second order in $\epsilon$, $f_a(\mathbf x, \mathbf v) = \left< F_a \right>_{\mathbf x}$ [see \cref{eq:orderingftildee,eq:orderingftildei}], we obtain
+%
+\begin{equation}
+     n_a \mathbf{M}_a^{lk}= \int \left< F_a\right> \left<\mathbf Y_a^{lk}\right>_{\mathbf x} d\mathbf v.
+\label{eq:zerorhomalk}
+\end{equation}
+%
+The operator $\left< ... \right>_{\mathbf x}$ is the gyroaverage operator holding $\mathbf x=\mathbf R + \mathbf \rho$, $\mu$ and $v_\parallel$ fixed while averaging over $\theta$.
+%
+This is opposed to the operator $\left< ... \right>_{\mathbf R}$, where all $\mathbf Z$ coordinates but $\theta$ are kept fixed.
+%
+The two operators coincide in the zero Larmor radius limit, $\rho=0$.
+%
+Using \cref{eq:ylvfull}, the gyroaverage of the tensors $\mathbf Y_a^{lk}$ holding $\mathbf x$ fixed is given by
+%
+\begin{equation}
+    \left< \mathbf Y^{lk} \right>_{\mathbf x} = v^l L_k^{l+1/2}(v^2) \sqrt{\frac{2\pi^{3/2}l!}{2^l(l+1/2)!}}\sum_{m=-l}^l \left< Y_{lm}(\varphi,\theta)\right>_{\mathbf x}\mathbf e^{l m}.
+\end{equation}
+%
+By rewriting the spherical harmonics $Y_{lm}(\varphi,\theta)$ in terms of associated Legendre polynomials $P_{l}^m(\cos \varphi)$ as \citep{Abramowitz1972}
+%
+\begin{equation}
+    Y_{lm}(\varphi,\theta) = (-1)^m\sqrt{\frac{(2l+1)}{4 \pi}\frac{(l-m)!}{(l+m)!}}P_{l}^m(\cos \varphi)e^{i m \theta},
+\label{eq:ylmasslag}
+\end{equation}
+%
+and noting that, for $m=0$, $P_{l}^0(\cos \varphi) = P_l(\cos \varphi)$ with $P_l$ a Legendre polynomial of order $l$, we obtain
+\begin{equation}
+    \left< \mathbf Y^{lk} \right>_{\mathbf x} = v^l L_k^{l+1/2}(v^2)  P_l(\cos \varphi) \sqrt{\frac{\pi^{1/2}l!(l+1/2)}{2^{l}(l+1/2)!}}\mathbf e^{l0}.
+\label{eq:gyroxLln}
+\end{equation}
+%
+The gyroaveraged formula \cref{eq:gyroxLln} proves Eq. (20) of \citet{Ji2006} where $\mathbf e^{l0}$ is replaced by $\mathbf P^l(\mathbf b)$.
+%
+The fluid moments in \cref{eq:zerorhomalk} can therefore be written as
+%
+\begin{equation}
+     n_a \mathbf{M}_a^{lk}=\sqrt{\frac{\pi^{1/2}l!(l+1/2)}{2^{l}(l+1/2)!}}\mathbf e^{l0}\int \left< F_a\right> v^l L_k^{l+1/2}(x_a^2)  P_l(\cos \varphi) dv_\parallel d\mu.
+\end{equation}
+%
+Using \cref{eq:faexp}, the gyroaveraged distribution function at fixed $\mathbf x$ can be written as
+%
+\begin{equation}
+    \left<f_a\right>_{\mathbf x} = f_{Ma}\sum_{l,k=0}^{\infty} \sqrt{\frac{\pi^{1/2}l!(l+1/2)}{2^{l}(l+1/2)!}}\mathbf e^{l0} \cdot \frac{\mathbf M_a^{lk}}{\sigma_k^l} v^l L_k^{l+1/2}(x_a^2)  P_l(\cos \varphi).
+\label{eq:fazerorho}
+\end{equation}
+%
+Equation (\ref{eq:fazerorho}) proves the gyroaveraged formulas for $\left< f \right>$ used to derive closures for fluid models at arbitrary collisionality in the vanishing Larmor radius limit in \citet{Ji2009a,Ji2013a,Ji2014a}.
+
+In order to perform the velocity integration in the definition of the moments $\mathbf M^{lk}$ at arbitrary $k_\perp \rho$ in guiding-center phase-space coordinates, we introduce the identity $f(\mathbf x) = \int f(\mathbf x')\delta(\mathbf x-\mathbf x')d\mathbf x'$ imposing $\mathbf x' = \mathbf R+\mathbf \rho$, and writing the volume element in phase-space as $d\mathbf x'd\mathbf v = (B_\parallel^*/m)d\mathbf R dv_\parallel d\mu d\theta$, we obtain
+%
+\begin{equation}
+    n_a \mathbf M_a^{lk}(\mathbf x)= \int f_a(\mathbf R + \mathbf \rho_a, \mathbf v) \mathbf Y_a^{lk}(\mathbf v/v_{tha}) \delta(\mathbf x - \mathbf R - \mathbf \rho_a) \frac{B_{\parallel}^*}{m}d\mathbf R dv_\parallel d\mu d\theta.
+\label{eq:gcmalndelta}
+\end{equation}
+%
+Using \cref{eq:fguidF}, noting that $\mathbf v = \mathbf v(\mathbf Z)$ due to \cref{eq:GCcoordinates}, and performing the integral over $\mathbf R$ in \cref{eq:gcmalndelta}, it follows that
+%
+\begin{equation}
+    n_a \mathbf M_a^{lk}(\mathbf x)= \int F_a(\mathbf x-{\mathbf \rho}_a, v_\parallel, \mu,\theta) \mathbf Y_a^{lk}[\mathbf v(\mathbf x-{\mathbf \rho}_a, v_\parallel, \mu, \theta)/v_{tha}] \frac{B_{\parallel}^*}{m}dv_\parallel d\mu d\theta.
+\label{eq:gcmalnnodelta}
+\end{equation}
+%
+Using the orderings in \cref{eq:orderingftildee1,eq:orderingftildei1} for the guiding-center distribution function $F_a$, we remove the $\theta$ dependence from $F_a$ by approximating $F_a \simeq \left< F_a \right>_{\mathbf R}$, effectively neglecting second order effects in $\epsilon$ in $\mathbf M_a^{lk}$, hence in the collision operator $C(f_a,f_b)$.
+%
+To make further analytical progress, we represent $F_a(\mathbf R, v_\parallel, \mu, \theta)$ by its Fourier transform $F_a(\mathbf k, v_\parallel, \mu, \theta)=\int F_a(\mathbf R, v_\parallel, \mu, \theta) e^{-i \mathbf k \cdot \mathbf R} d \mathbf R$, and write
+%
+\begin{equation}
+    n_a \mathbf M_a^{lk}(\mathbf x)= \int \left<F_a(\mathbf k, v_\parallel, \mu,\theta) \right>_{\mathbf R}\mathbf Y^{lk}[\mathbf v(\mathbf x-{\mathbf \rho}_a, v_\parallel, \mu, \theta)/v_{tha}] e^{i \mathbf k \cdot \mathbf x}e^{-i \mathbf k \cdot \rho} \frac{B_{\parallel}^*}{m}d \mathbf k dv_\parallel d\mu d\theta.
+\label{eq:gcmalnnodelta2}
+\end{equation}
+%
+By aligning the $\mathbf k$ coordinate system in the integral of \cref{eq:gcmalnnodelta2} with the axes $(\mathbf b, \mathbf e_1, \mathbf e_2)$ [see \cref{eq:GCcoordinates}], we write $\exp(-i \mathbf k \cdot \mathbf \rho)=\exp(-i k_\perp \rho \cos \theta)$.
+%
+We then use the Jacobi-Anger expansion in \cref{eq:jacobianger}, and rewrite \cref{eq:gcmalnnodelta2} as
+%
+\begin{equation}
+\begin{split}
+    n_a \mathbf M_a^{lk}(\mathbf x)= \sum_{p=-\infty}^{\infty}(-1)^p &\int J_p(k_\perp \rho)\left<F_a(\mathbf k, v_\parallel, \mu,\theta)\right>_{\mathbf R}  e^{i \mathbf k \cdot \mathbf x}\\
+    &\times\mathbf Y^{lk}[\mathbf v(\mathbf x-{\mathbf \rho}_a, v_\parallel, \mu, \theta)/v_{tha}] e^{-ip\theta} \frac{B_{\parallel}^*}{m}d \mathbf k dv_\parallel d\mu d\theta.
+\end{split}
+\label{eq:gcmalnnodelta3}
+\end{equation}
+%
+The spatial dependence $\mathbf R$ of the particle velocity $\mathbf v(\mathbf Z)$, as shown in \cref{eq:GCcoordinates,eq:gcmu}, is given uniquely by the basis vectors $\mathbf b, \mathbf e_1$, and $\mathbf e_2$, and the magnetic field $B$.
+%
+Therefore, the velocity $\mathbf v$ in the argument of $\mathbf Y_a^{lk}$ in \cref{eq:gcmalnnodelta3} can be expanded as
+%
+\begin{equation}
+    \mathbf v(\mathbf x-{\mathbf \rho}_a, v_\parallel, \mu, \theta) = \mathbf v(\mathbf x, v_\parallel, \mu, \theta) + O({\mathbf \rho}_a \cdot \nabla \log B).
+\label{eq:approxvR}
+\end{equation}
+%
+The second term in \cref{eq:approxvR} introduces higher order terms in the collision operator and is therefore neglected.
+
+Using \cref{eq:ylvfull} to express $\mathbf Y_a^{lk}(\mathbf v)$ in terms of spherical harmonics, we perform the gyroangle integration in \cref{eq:gcmalnnodelta2}, and define the Bessel-Fourier operator
+%
+\begin{equation}
+     j_m[F_a]\equiv \int J_m(k_\perp \rho_a)\left<F_a(\mathbf k, v_\parallel, \mu,\theta)\right>_{\mathbf R}  e^{i \mathbf k \cdot \mathbf x}d \mathbf k,
+\label{eq:fourierbessel}
+\end{equation}
+%
+to obtain the final expression for the fluid moments $\mathbf M_a^{lk}$ in terms of coupled $v_\parallel$ and $\mu$ moments of the guiding-center distribution function $\left<F_a\right>_{\mathbf R}$
+%
+\begin{equation}
+\begin{split}
+    n_a \mathbf M_a^{lk}(\mathbf x)&= \sqrt{\frac{8\pi^{7/2}l!}{2^l(l+1/2)!}}\sum_{m=-l}^{l} \mathbf e^{l m}(-1)^m \mathcal{M}^{lk}_{am}(\mathbf x),
+\end{split}
+\label{eq:gcmalnfinal}
+\end{equation}
+%
+with
+%
+\begin{equation}
+    \mathcal{M}^{lk}_{am}(\mathbf x)=\int j_m[F_a] v^l L_k^{l+1/2}(x_a^2) Y_{lm}(\varphi,0)
+     \frac{B_{\parallel}^*}{m} dv_\parallel d\mu.
+\end{equation}
+
+Equation (\ref{eq:gcmalnfinal}) can now be used to express the collision operator $C(f_a,f_b)$ in terms of $v_\parallel$ and $\mu$ integrals of $\left< F_a \right>$.
+%
+Using \cref{eq:ccjiheld1,eq:ylvfull,eq:JiCab1}, and defining
+%
+\begin{equation}
+    E_{i~v}^{ls nt} = \mathbf e^{l+n-2i~v}\cdot ({\mathbf e^{ls}\cdot^{i}\mathbf e^{nt}})_{TS},
+\end{equation}
+%
+we can write the collision operator in \cref{eq:JiCab1,eq:ccjiheld1} as a function of the $\mathcal{M}^{lk}_{am}$ moments, i.e., we can express
+%
+\begin{equation}
+\begin{split}
+    c^{lkmnqr}_{ab}&=\sum_{u=0}^{\text{min}(2,l,n)}\sum_{i=0}^{\text{min}(l,n)-u}d_i^{l-u,n-u}a^{ln}_{i+u}\sum_{s=-l}^l\sum_{t=-n}^n\sum_{v=-(l+n-2i-2u)}^{l+n-2i-2u} E^{ls nt}_{i+u~v}\\
+    &\times  Y_{l+n-2i-2u~v}(\varphi,\theta)\frac{\nu_{*abu}^{lm,nr}(v^2)}{n_a n_b} \mathcal{M}^{lk}_{as}(\mathbf x)\mathcal{M}^{nq}_{bt}(\mathbf x),
+\end{split}
+    \label{eq:ccgc}
+\end{equation}
+%
+with
+%
+\begin{equation}
+    a^{ln}_{i}=\frac{8}{2^{l+n-i}}\sqrt{\frac{2 \pi^{17/2}l!n!(l+n-2i)!}{(l+1/2)!(n+1/2)!(l+n-2i+1/2)!}}.
+\end{equation}
+%
+
+We now focus on the gyroaverage of the collision operator in \cref{eq:ccgc}.
+%
+We first note that the gyroangle $\theta$ in $c^{lkmnqr}_{ab}$ is present only in the spherical harmonic $ Y_{l+n-2i-2u~v}(\varphi,\theta)$ and the fluid moments $\mathcal{M}^{lk}_{as}$ and $\mathcal{M}^{nq}_{bt}$ as the latter are functions of $\mathbf x = \mathbf R + \mathbf \rho$.
+%
+To make the gyroangle dependence explicit, we write both $\mathcal{M}^{lk}_{as}$ and $\mathcal{M}^{nq}_{bt}$ in Fourier space as
+%
+\begin{equation}
+    \mathcal{M}^{lk}_{as}(\mathbf x)\mathcal{M}^{nq}_{bt}(\mathbf x) = \int d\mathbf k d \mathbf k' e^{i(\mathbf k + \mathbf k')\cdot \mathbf R}\mathcal{M}^{lk}_{as}(\mathbf k)\mathcal{M}^{nq}_{bt}(\mathbf k')e^{i(\mathbf k \cdot \mathbf \rho_a + \mathbf k'\cdot \mathbf \rho_b)}.
+\label{eq:Fouriermoment}
+\end{equation}
+%
+Using the Jacobi-Anger expansion of \cref{eq:jacobianger}, we find that
+%
+\begin{align}
+    \left<Y_{lm}(\varphi,\theta)\mathcal{M}^{lk}_{as}(\mathbf x)\mathcal{M}^{nq}_{bt}(\mathbf x)\right>_{\mathbf R}&=\int d\mathbf k d \mathbf k' e^{i(\mathbf k + \mathbf k')\cdot \mathbf R}\mathcal{M}^{lk}_{as}(\mathbf k)\mathcal{M}^{nq}_{bt}(\mathbf k') i^m\nonumber\\
+    &\times\sqrt{\frac{2l+1}{4\pi}\frac{(l-m)!}{(l+m)!}}P_l^m(\cos \varphi)J_m(k_\perp \rho_a + k_\perp' \rho_b).
+\end{align}
+%
+The gyroaveraged collision operator at arbitrary $k_\perp \rho$ is therefore given by
+%
+\begin{equation}
+    \left<C(F_a,F_b)\right>_{\mathbf R}=f_{aM}\sum_{l,k,n,q=0}^\infty\sum_{m=0}^k\sum_{r=0}^{q}{L_{km}^lL_{qr}^n} \left<c^{lkmnqr}_{ab}\right>_{\mathbf R},
+    \label{eq:JiCabgyro}
+\end{equation}
+%
+with
+%
+\begin{align}
+    \left<c^{lkmnqr}_{ab}\right>_{\mathbf R}&=\sum_{u=0}^{\text{min}(2,l,n)}\sum_{i=0}^{\text{min}(l,n)-u}d_i^{l-u,n-u}a^{ln}_{i+u}\sum_{s=-l}^l\sum_{t=-n}^n \sum_{v=-(l+n-2i-2u)}^{l+n-2i-2u} E^{ls nt}_{i+u~v}\nonumber\\
+    &\times b_{i+u}^{l+n v} P_{l+n-2i-2u}^v(\cos \varphi){\nu_{*abu}^{lm,nr}(v^2)} \nonumber\\
+    &\times \int J_v(k_\perp \rho_a + k_\perp' \rho_b)\mathcal{M}^{lk}_{as}(\mathbf k)\mathcal{M}^{nq}_{bt}(\mathbf k')e^{i(\mathbf k +\mathbf k')\cdot \mathbf R}d \mathbf k d\mathbf k'.
+    \label{eq:ccgcgyro}
+\end{align}
+%
+and
+%
+\begin{equation}
+    b_{i}^{lv}=i^v\sqrt{\frac{2l-4i}{4\pi}\frac{(l-2i-v)!}{(l-2i+v)!}}
+\end{equation}
+%
+We note that, if only first order $k_\perp \rho$ terms are kept in the Fourier-Bessel operator of \cref{eq:fourierbessel}, the collision operator in \cref{eq:JiCabgyro} reduces to the drift-kinetic collision operator found in \cref{ch:dk}.
+
+In \cref{eq:JiCabgyro}, the gyroaveraged collision operator is cast in terms of $v_\parallel$ and $\mu$ moments of the guiding-center distribution function $\left< F_a \right>$ for arbitrary values of $k_\perp \rho$.
+%
+We now apply the transformation $T$ of \cref{eq:gyrotransf} to \cref{eq:JiCabgyro} in order to write the gyroaveraged collision operator in terms of $\overline v_\parallel$ and $\overline \mu$ moments of the gyrocenter distribution function $\left<\overline  F_a \right>$.
+%
+As shown in \cref{sec:ordering1}, only the zeroth order component in $\epsilon_\delta$ of $\left<C(\overline{F_a}, \overline{F_b})\right>$ is needed in order to adequately describe collisional processes at first order in the gyrokinetic framework.
+%
+Therefore, using \cref{eq:gyrotransf}, we apply the zeroth order transformations $\mathbf Z \simeq \overline{\mathbf Z}$ and $F_a(\mathbf Z) = T \overline{F_a}(\mathbf Z) \simeq \overline{F_a}(\mathbf Z)$ to the collision operator $\left< C(F_a,F_b) \right>$ in \cref{eq:JiCabgyro}, yielding
+%
+\begin{equation}
+    \left<C(\overline{F_a},\overline{F_b})\right>_{\overline {\mathbf R}}\simeq f_{aM}\sum_{l,k,n,q=0}^\infty\sum_{m=0}^k\sum_{r=0}^{q}{L_{km}^lL_{qr}^n} \left<\overline c^{lkmnqr}_{ab}\right>_{\overline {\mathbf R}},
+    \label{eq:JiCabgyrok}
+\end{equation}
+%
+with
+%
+\begin{align}
+    \left<\overline c^{lkmnqr}_{ab}\right>_{\overline {\mathbf R}}&=\sum_{u=0}^{\text{min}(2,l,n)}\sum_{i=0}^{\text{min}(l,n)-u}d_i^{l-u,n-u}a^{ln}_{i+u}\sum_{s=-l}^l\sum_{t=-n}^n \sum_{v=-(l+n-2i-2u)}^{l+n-2i-2u} E^{ls nt}_{i+u~v}\nonumber\\
+    &\times b_{i+u}^{l+n v}P_{l+n-2i-2u}^v(\overline v_\parallel/\overline v){\nu_{*abu}^{lm,nr}(\overline v^2)} \nonumber\\
+    &\times \int J_v(k_\perp \rho_a + k_\perp' \rho_b)\overline {\mathcal{M}}^{lk}_{as}(\mathbf k)\overline {\mathcal{M}}^{nq}_{bt}(\mathbf k')e^{i(\mathbf k +\mathbf k')\cdot \overline {\mathbf R}}d \mathbf k d\mathbf k'.
+    \label{eq:ccgcgyrok}
+\end{align}
+%
+where $\overline v^2 = \overline v_\parallel^2+2 B \overline \mu/m$ and the gyrokinetic moments $\overline {\mathcal{M}}^{lk}_{am}$ are given by
+%
+\begin{equation}
+    \overline{\mathcal{M}}^{lk}_{am}=\int j_m[\overline{F_a}] \overline v^l L_k^{l+1/2}(\overline v^2) Y_{lm}\left(\overline \varphi,0\right)\frac{B_{\parallel}^*}{m} d \overline v_\parallel d\overline \mu,
+\label{eq:gyrokma}
+\end{equation}
+%
+with the Fourier-Bessel operator $j_m$ given by \cref{eq:fourierbessel}.
+%
+The collision operator in \cref{eq:JiCabgyrok} represents the gyrokinetic full Coulomb collision operator up to $O(\epsilon^2)$.
+%
+In this expression, the integro-differential character of the $C(f_a,f_b)$ operator is replaced by a two-dimensional integral of the gyrocenter distribution function over velocity coordinates $\overline v_\parallel$ and $\overline \mu$ [\cref{eq:gyrokma}].
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hermite-Laguerre Expansion of the Coulomb Operator}
+\label{eq:hermlag}
+%
+In this section, we expand the distribution function into an orthogonal Hermite-Laguerre polynomial basis, \cref{eq:gyrofgk}, and compute the Hermite-Laguerre moments of the Coulomb collision operator in \cref{eq:JiCabgyrok}.
+%
+In order to express the collision operator in terms of the moments $\overline N_a^{pj}$ in \cref{eq:gyromoments} and evaluate its Hermite-Laguerre moments, we first consider the gyrokinetic moments $\overline{\mathcal{M}}_{am}^{lk}$ and write the integral in \cref{eq:gyrokma} as a function of the gyrocenter moments of the form of \cref{eq:gyromoments}.
+%
+As a first step, we project both the Fourier-Bessel operator $j_m[\overline{F_a}]$ and the spherical harmonics $Y_{lm}$ on the Hermite-Laguerre basis.
+%
+The $\overline \mu$ and $k_\perp$ dependence in the Fourier-Bessel operator $j_m$, \cref{eq:fourierbessel}, is decomposed using the identity between Bessel and Legendre functions in \cref{eq:bessLeg}.
+%
+The Fourier-Bessel operator in \cref{eq:fourierbessel}, together with the identity in \cref{eq:bessLeg} and the Hermite-Laguerre expansion of \cref{eq:gyrof}, can then be written as
+%
+\begin{equation}
+    j_m[\overline{F_a}]=f_{Ma}\sum_{p=0}^\infty \sum_{j=0}^\infty \sum_{r=0}^\infty \frac{H_p(\overline s_{\parallel a}) L_j(\overline s_{\perp a}^2)}{\sqrt{2^p p!}} \frac{L_r^m( \overline s_{\perp a}^2) \overline s_{\perp a}^m}{(m+r)!}\int \overline N_a^{pj}(\mathbf k)b_a^{m+2r}e^{-b_a^2} e^{i \mathbf k \cdot \mathbf x} d\mathbf k.
+\label{eq:jmhplj}
+\end{equation}
+%
+As a second step, we rewrite the spherical harmonics $Y_{lm}(\varphi,0)$ using \cref{eq:ylmasslag}
+%
+\begin{equation}
+    Y_{lm}(\varphi,0)=(-1)^m\sqrt{\frac{2l+1}{4\pi}\frac{(l-m)!}{(l+m)!}}P_l^m(\cos \varphi).
+\label{eq:ylm0}
+\end{equation}
+%
+In order to expand the associated Legendre polynomials $P_l^m(\cos \varphi)$ in \cref{eq:ylm0} in a Hermite-Laguerre basis, we generalize the basis transformation in \cref{eq:tlkpj} as
+%
+\begin{equation}
+    \frac{\overline v^l}{v_{tha}^l} P_l^m\left(\frac{\overline v_\parallel}{\overline v}\right) L_k^{l+1/2}\left(\frac{\overline v^2}{v_{tha}^2}\right) = \sum_{p=0}^{l+2k}\sum_{j=0}^{k+\floor{l/2}}T_{lkm}^{pj}H_p\left(\frac{\overline v_{\parallel a}}{v_{tha}}\right)L_j\left(\frac{\overline \mu B}{T_a}\right)\left(\frac{\overline \mu B}{T_a}\right)^{m/2},
+\label{eq:plljhplj}
+\end{equation}
+%
+For the derivation of the $T_{lkm}^{pj}$ coefficients, see \cref{app:tlkpj1}.
+%
+The inverse transformation coefficients $\left(T^{-1}\right)_{pj}^{lkm}$ are defined as
+%
+\begin{equation}
+    H_p\left(\frac{\overline v_{\parallel a}}{v_{tha}}\right)L_j\left(\frac{\overline \mu B}{T_a}\right)\left(\frac{\overline \mu B}{T_a}\right)^{m/2}=\sum_{l=0}^{p+2j}\sum_{k=0}^{j+\floor{p/2}}\left(T^{-1}\right)_{pj}^{lkm}\frac{\overline v^l}{v_{tha}^l} P_l^m\left(\frac{\overline v_\parallel}{\overline v}\right) L_k^{l+1/2}\left(\frac{\overline v^2}{v_{tha}^2}\right).
+\label{eq:plljhpljminus1}
+\end{equation}
+%
+The gyrocenter moments $\overline{\mathcal{M}}^{lk}_{am}$ in \cref{eq:gyrokma} can be rewritten using the identities in \cref{eq:jmhplj,eq:plljhplj} and
+%
+\begin{equation}
+    L_r^m(x)L_j(x)x^m = \sum_{s=0}^{m+r+j}d^m_{rjs} L_s(x),
+\label{eq:doubleLaguerre}
+\end{equation}
+%
+with the $d^r_{mjs}$ coefficients given by
+%
+\begin{equation}
+    d^r_{mjs}=\sum_{r_1=0}^r \sum_{j_1=0}^j \sum_{s_1=0}^s L_{r r_1}^{-1/2} L_{j j_1}^{m-1/2} L_{s s_1}^{-1/2} (r_1+j_1+s_1+m)!,
+\end{equation}
+%
+yielding the following expression
+%
+\begin{align}
+    \overline{\mathcal{M}}_{am}^{lk}(\mathbf k)&=\sum_{g=0}^\infty\sum_{h=0}^{l+2k}\sum_{u=0}^{k+\floor{l/2}}\sum_{s=0}^{m+r+u}M_{lkmg}^{hus} \overline N_{a}^{hs}(\mathbf k)\left(\frac{k_\perp \rho_{tha}}{2}\right)^{2g+m}e^{-\frac{k_\perp^2 \rho_{tha}^2}{4}}.
+\label{eq:gyromomentsfinal}
+\end{align}
+%
+where we defined
+%
+\begin{equation}
+    M_{lkmg}^{hus}=(-1)^m\frac{T_{lkm}^{hu} d_{gus}^m \sqrt{2^p p!}}{(m+g)!}\sqrt{\frac{2l+1}{4\pi}\frac{(l-m)!}{(l+m)!}}.
+\end{equation}
+%
+Using the form for $\overline{\mathcal{M}}_{am}^{lk}$ in \cref{eq:gyromomentsfinal}, the collision operator in \cref{eq:JiCabgyrok} can be therefore expressed in terms of Hermite-Laguerre moments $N^{pj}$ of the distribution function.
+%
+We note that in the drift-kinetic limit $k_\perp \rho_{tha}=0$, the moments $ \overline{\mathcal{M}}_{am}^{lk}$ in \cref{eq:gyromomentsfinal} reduce to the ones in \cref{ch:dk}.
+
+We now take Hermite-Laguerre moments of the collision operator $\left<C(\overline{F_a},\overline{F_b})\right>$, i.e., we evaluate
+%
+\begin{equation}
+\begin{split}
+    C_{ab}^{pj}(\overline{\mathbf R})&=\int \left<C(\overline{F_a},\overline{F_b})\right>_{\overline{\mathbf R}} \frac{H_p(\overline s_{\parallel a})L_j(\overline s_{\perp a^2})}{\sqrt{2^p p!}}\frac{B}{m_a}d \overline v_\parallel d \overline \mu d\overline \theta,
+\end{split}
+\label{eq:collopmoments}
+\end{equation}
+%
+where we neglected higher order $v_\parallel \mathbf b \cdot (\nabla \times \mathbf b)/\Omega_a$ terms in $B_{\parallel}^*$.
+%
+Writing the gyroaveraged collision operator $\left<C(\overline{F_a},\overline{F_b})\right>$ in \cref{eq:JiCabgyrok} using \cref{eq:gyromomentsfinal,eq:ccgcgyrok}, and expanding the Bessel function $J_{v}(k_\perp \rho_a+k_\perp' \rho_b)=J_{v}[(k_\perp+k_\perp'{m_b/m_a}q_a/q_b)\rho_{tha} s_{\perp a}]$ using \cref{eq:bessLeg}, the following form for the $\left<\overline c_{ab}^{lkmnqr} \right>_{\overline {\mathbf R}}$ term appearing in $\left<C(\overline{F_a},\overline{F_b})\right>_{\overline{\mathbf R}}$ is obtained
+% %
+% \begin{equation}
+%     \left<C(f_a,f_b)\right>=f_{aM}\sum_{l,k,n,q=0}^\infty\sum_{m=0}^k\sum_{r=0}^q {L_{km}^l L_{qr}^n}\left<\overline c_{ab}^{lkmnqr} \right>,
+% \label{eq:hermitelaguerrecpj}
+% \end{equation}
+% %
+% with
+%
+\begin{align}
+    \left<\overline c_{ab}^{lkmnqr} \right>_{\overline {\mathbf R}}&=\int\sum_{u=0}^{min(2,l,n)}\sum_{i=0}^{min(l,n)-u} \sum_{v=-l-n+2i+2u}^{l+n-2i-2u}\sum_{z=0}^\infty D_{abuivz}^{lkmnqr}(\mathbf k, \mathbf k')\nonumber\\
+    &\times  P_{l+n-2i-2u}^v\left(\frac{\overline v_\parallel}{\overline v}\right)\overline s_{\perp a}^v L_z^v(\overline s_{\perp a}^2) \nu_{*abu}^{lm,nr}(\overline v^2)e^{i (\mathbf k + \mathbf k')\mathbf R} d\mathbf k \mathbf k'.
+\label{eq:collophl}
+\end{align}
+%
+In \cref{eq:collophl}, we defined the $D_{abuivz}^{lkmnqr}$ term
+%
+\begin{equation}
+    D_{abuivz}^{lkmnqr}(\mathbf k, \mathbf k')=\sum_{s=-l}^l \sum_{t=-n}^n E_{i+u~v}^{lsnt} B_{ab}^{2z+v}e^{-B_{ab}^2}\frac{d_i^{l-u,n-u}a_{i+u}^{ln}}{(v+z)!}\mathcal{N}_{abuivz}^{lkmnqr}(\mathbf k, \mathbf k'),
+\end{equation}
+%
+where $B_{ab}=(k_\perp + k_\perp' {m_b/m_a}q_a/q_b) \rho_{tha}/2$ and the convolution operator $\mathcal{N}_{abuivz}^{lkmnqr}(\mathbf k, \mathbf k')$ is given by
+%
+\begin{align}
+    \mathcal{N}_{abuivz}^{lkmnqr}(\mathbf k, \mathbf k')&=e^{i(\mathbf k + \mathbf k')\cdot \mathbf R} {b_{i+u}^{l+n v}} \sum_{g_1,g_2=0}^\infty\sum_{h_1=0}^{l+2k}\nonumber\\
+    &\times\sum_{h_2=0}^{n+2q}\sum_{u_1=0}^{k+\floor{l/2}}\sum_{s_1=0}^{m+g_1+u_1}\sum_{s_2=r}^{r+g_2+u_2}M_{lkmg}^{h_1 u_1 s_1}M_{mgt}^{h_2 u_2 s_2} \overline N_a^{h_1 s_1} \overline N_b^{h_2 s_2},
+\end{align}
+%
+with $\overline N^{pj}$ the Hermite-Laguerre moments of the distribution function defined in \cref{eq:gyrof}.
+
+Finally, using \cref{eq:JiCabgyrok}, the result in \cref{eq:collophl} is used in \cref{eq:collopmoments} in order to find the Hermite-Laguerre moments $C_{ab}^{pj}$ of the full Coulomb collision operator.
+%
+This yields
+%
+\begin{equation}
+    C_{ab}^{pj}=\sum_{l,k,n,q=0}^\infty\sum_{m=0}^k\sum_{r=0}^q \frac{L_{km}^l L_{qr}^n}{\sqrt{2^p p!}} C_{ab,lkm}^{pj,nqr},
+\label{eq:hermitelaguerrecpj2}
+\end{equation}
+with
+%
+\begin{align}
+    C_{ab,lkm}^{pj,nqr}(\mathbf k, \mathbf k') &=\sum_{u=0}^{min(2,l,n)}\sum_{i=0}^{min(l,n)-u} \sum_{v=-l-n+2i+2u}^{l+n-2i-2u}\sum_{z=0}^\infty D_{abuivz}^{lkmnqr}(\mathbf k, \mathbf k') I,
+\label{eq:collmomentsfinal}
+\end{align}
+%
+and
+\begin{equation}
+    I = \int f_{aM} P_{l+n-2i-2u}^v(\overline v_\parallel /\overline v){\nu_{*abu}^{lm,nr}(\overline v^2)} s_{\perp a}^v H_p(\overline s_{\parallel a})L_j(\overline s_{\perp a}^2) L_z^v(s_{\perp a}^2) \frac{B_\parallel^{*}}{m_a}d \overline v_\parallel d \overline \mu.
+\end{equation}
+%
+The integral factor $I$ can be performed analytically by first rewriting the product of two Laguerre polynomials as a single one using
+%
+\begin{equation}
+    L_r^m(x)L_j(x)=\sum_{s=0}^{r+j}\overline d_{rjs}^m L_s(x),
+\end{equation}
+%
+with
+%
+\begin{equation}
+    \overline d^r_{mjs}=\sum_{r_1=0}^r \sum_{j_1=0}^j \sum_{s_1=0}^s L_{r r_1}^{-1/2} L_{j j_1}^{m-1/2} L_{s s_1}^{-1/2} (r_1+j_1+s_1)!,
+\end{equation}
+%
+expressing the resulting Hermite-Laguerre basis in terms of Legendre-Associated Laguerre using \cref{eq:inversebasistransf}, and writing the phase-space volume $(B_\parallel^{*}/m)d \overline v_\parallel d \overline \mu$ as $\overline v^2 d\overline v d \overline \xi$ with $\overline \xi = \overline v_\parallel/\overline v$.
+%
+This yields
+%
+\begin{equation}
+    I = \sum_{g=0}^{z+j}\sum_{s=0}^{p+2g}\sum_{t=0}^{g+\floor{p/2}}\overline d_{zjg}^v \left(T^{-1}\right)^{stv}_{pg} C_{*abu}^{st,lm,nr}\frac{(s+v)!}{(s-v)!}\frac{\delta_{l+n-2i-2u,s}}{4\pi(s+1/2)}.
+\label{eq:finalI}
+\end{equation}
+%
+For an analytically closed expression ready to be implemented numerically of the factor $C_{*abu}^{st,lm,nr}=\int f_{Ma}\nu_{*abu}^{lm,nr}(v^2)L_{t}^{s+1/2}(v^2) v^s d\mathbf v$ see \citet{Ji2009}.
+%
+We note that the long-wavelength limit can be found by setting $m_1=m_2=0$ and neglecting second order $k_\perp \rho$ effects in the collision operator \cref{eq:collmomentsfinal}, which yields the Hermite-Laguerre moments of the collision operator moments found in \cref{ch:dk}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Small-Mass Ratio Approximation}
+\label{sec:smallmassratio}
+
+In this section, we derive a simplified version of the electron-ion and ion-electron Coulomb collision operators in the gyrokinetic regime by taking advantage of the small electron-to-ion mass ratio $m_e/m_i$.
+%
+In $(\mathbf x, \mathbf v)$ phase-space coordinates, the full coulomb collision operator in \cref{eq:coulombop} can be greatly simplified by taking advantage of the fact that, excluding the case $T_i \gg T_e$, the ion thermal velocity is small in comparison with the electron thermal velocity.
+%
+To first order in $m_e/m_i$, the electron-ion collision operator can be written as \citep{Helander2002}
+%
+\begin{equation}
+    C_{ei}(f_e)=C_{ei}^0+C_{ei}^1,
+\end{equation}
+%
+where $C_{ei}^0$ and $C_{ei}^1$ given by \cref{eq:cei0,eq:cei1}, respectively.
+%
+We expand $f$ according to \cref{eq:faexp} and write $C_{ei}^0$ as
+%
+\begin{equation}
+    C_{ei}^0=-f_{eM}\sum_{l,k}\frac{n_i L_{ei}}{v_{the}^3 c_e^3}\frac{l(l+1)}{\sqrt{\sigma_k^l}}L_k^{l+1/2}\left(c_e^2\right) \mathbf Y^l(\mathbf c_e) \cdot {\mathbf M}_e^{lk}(\mathbf x).
+    \label{eq:cei0eig1}
+\end{equation}
+%
+We now Fourier transform the moments $\mathbf M_e^{lk}$ in \cref{eq:cei0eig1} as $\mathbf M_e^{lk}(\mathbf R) = \int \mathbf M_e^{lk}(\mathbf k)e^{i \mathbf k \cdot \mathbf R} d \mathbf k$ and write the gyroaveraged collision operator $C_{ei}^0$ as
+%
+\begin{equation}
+    \left<C_{ei}^0\right>=-\int d\mathbf k e^{i \mathbf k \cdot \mathbf R} f_{eM}\sum_{l,k}\frac{n_i L_{ei}}{v_{the}^3 c_e^3}\frac{l(l+1)}{\sqrt{\sigma_k^l}} L_k^{l+1/2}\left(c_e^2\right) \left<\mathbf Y^l(\mathbf c_e) e^{i \mathbf k \cdot \mathbf \rho_e}\right>\cdot \mathbf M_{e}^{lk}(\mathbf k) n_i .
+    \label{eq:cei0eiggyro}
+\end{equation}
+%
+Using the Jacobi-Anger expansion of \cref{eq:jacobianger}, \cref{eq:bessLeg}, and the inverse basis transformation 
+%
+\begin{equation}
+   H_p\left(\frac{\overline v_{\parallel a}}{v_{tha}}\right)L_j\left(\frac{\overline \mu B}{T_a}\right)\left(\frac{\overline \mu B}{T_a}\right)^{m/2} = \sum_{l=0}^{p+2j}\sum_{k=0}^{j+\floor{p/2}}(T^{-1})_{pj}^{lkm}  \frac{\overline v^l}{v_{tha}^l} P_l^m\left(\frac{\overline v_\parallel}{\overline v}\right) L_k^{l+1/2}\left(\frac{\overline v^2}{v_{tha}^2}\right),
+\label{eq:inversebasistransf}
+\end{equation}
+%
+we obtain
+%
+\begin{align}
+    \left<\mathbf Y^l(\mathbf v) e^{i \mathbf k \cdot \mathbf \rho_e}\right> &= \sum_{m=-l}^l \sum_{r=0}^\infty \sum_{i=0}^{r}\sum_{s=0}^{2i}\sum_{t=0}^i \sqrt{\frac{\pi^{1/2}l!}{2^l(l-1/2)!}\frac{(l-m)!}{(l+m)!}}\frac{i^m \mathbf e^{lm}}{(m+r)!}\frac{(m+r-i-1)!}{(r-i)!(m-1)!}\nonumber\\
+    &\times (T^{-1})_{0i}^{stm}b_e^{2r+m}e^{-b_e^2}c_e^{l+s}P_l^m(\cos \varphi)P_s^m(\cos \varphi) L_t^{s+1/2}(c_e^2),
+\label{eq:Ylexpgyro}
+\end{align}
+%
+with $b_e=k_\perp \rho_{the}/2$.
+%
+Equation (\ref{eq:Ylexpgyro}) allows us to express the pitch-angle scattering operator $\left<C_{ei}^0\right>$ in \cref{eq:cei0eiggyro} in a form suitable to project onto a Hermite-Laguerre basis, i.e., to calculate $C_{ei}^{0pj}$ moments of the form
+%
+\begin{align}
+    C_{ei}^{0pj}&=\int \left<C_{ei}^0\right> \frac{H_p\left(\frac{\overline v_{\parallel}}{v_{tha}}\right)L_j\left(\frac{\overline \mu B}{T_a}\right) }{\sqrt{2^p p!}}  d\overline v_\parallel d \overline \mu d \overline \theta \frac{B}{m_a}=\sum_{l=0}^{p+2j}\sum_{k=0}^{j+\floor{p/2}}\frac{(T^{-1})_{pj}^{lk0}v_{the}^3}{\sqrt{2^p p!}} I_{ei}^{0lk},
+\label{eq:ceiopjgg}
+\end{align}
+%
+where we define
+%
+\begin{equation}
+    I_{ei}^{0lk}=\int \left<C_{ei}^0\right> c_e^l P_l(\cos \varphi) L_k^{l+1/2}(c_e^2) c_e^2 dc_e d\cos \varphi.
+\label{eq:iei0lk}
+\end{equation}
+%
+An analytical form for the integral factor $I_{ei}^{0lk}$ can be derived using the expression for $\left<C_{ei}^0\right>$, \cref{eq:cei0eiggyro}, and \cref{eq:Ylexpgyro}, yielding
+%
+\begin{align}
+    I_{ei}^{0lk}(\mathbf k)&=-\sum_{u,v}\frac{n_i L_{ei}}{v_{the}^3}\frac{u(u+1)}{\sqrt{\sigma_v^u}} n_i \mathbf M_{e}^{lk}(\mathbf k) \cdot\sum_{m=-u}^u \sum_{r=0}^\infty \sum_{i=0}^{r}\sum_{s=0}^{2i}\sum_{t=0}^i(T^{-1})_{0i}^{stm}e^{-b_e^2}\nonumber\\
+    &\times \sqrt{\frac{\pi^{1/2}u!}{2^u(u-1/2)!}\frac{(u-m)!}{(u+m)!}}\frac{i^m \mathbf e^{um}}{(m+r)!}\frac{(m+r-i-1)!}{(r-i)!(m-1)!}b_e^{2r+m}I_{L k t}^{l u s}I_{Pm}^{l u s},
+\end{align}
+%
+where the integral $I_{L k t}^{l u s}$ is given by
+%
+\begin{equation}
+    I_{L k t}^{l u s}=\sum_{m1=0}^{k}\sum_{m2=0}^{t}{L_{km_1}^{l}L_{tm_2}^s}(m_1+m_2+(l+u+s)/2-1)!,
+\end{equation}
+%
+and $I_{Pm}^{l u s}$ can be calculated using Gaunt's formula \citep{Gaunt1929}
+%
+\begin{align}
+    I_{Pm}^{l u s}&=\int_{-1}^{1} P_l(x)P_{u}^m(x)P_{s}^m(x) \frac{dx}{2}\nonumber\\
+    &=(-1)^{\frac{u+s-l}{2}-m}\frac{(s+m)!(u+l-s)!\left(\frac{u+l+s}{2}\right)!}{\left(\frac{l+s-u}{2}\right)!\left(\frac{u-l+s}{2}\right)!\left(\frac{u+l-s}{2}\right)!(u+l+s+1)!}\nonumber\\
+    &\times\sum_{t=\text{max}(0,s-l-u)}^{\text{min}(l+s-u,u-m,s-m)}\frac{(u+m+t)!(l+s-m-t)!}{t!(u-m-t)!(l-s+m+t)!(s-m-t)!}.
+\label{eq:gaunt}
+\end{align}
+%
+%For the expression of $\mathbf M_e^{lk}$ in terms of Hermite-Laguerre moments $\overline N_e^{pj}$ of the distribution function, see \cref{eq:gcmalnfinal,eq:gyromomentsfinal}.
+
+Finally, we compute the Hermite-Laguerre moments of the momentum-conserving term $C_{ei}^1$ in the collision operator $C_{ei}$.
+%
+By noticing that $\mathbf u_i \cdot \mathbf c_e=u_{\parallel i} c_{\parallel e}+u_{\perp i} c_{\perp e} \cos \theta$, $\left<e^{i \mathbf k \cdot \mathbf \rho }\right>=J_0(k_\perp \rho)$, and $\left<e^{i \mathbf k \cdot \mathbf \rho }\cos \theta \right>=i J_1(k_\perp \rho)$, the gyroaveraged $\left< C_{ei}^{1}\right>$ operator can be written as
+%
+\begin{equation}
+    \left< C_{ei}^{1}\right> = \frac{2 n_i L_{ei}}{v_{the}^4c_e^3}\int d\mathbf k e^{i \mathbf k \cdot \mathbf R}f_{Me}\left[ u_{\parallel i}(\mathbf k) c_{\parallel e} J_0(k_\perp \rho_i)+u_{\perp i} c_{\perp e} i J_1(k_\perp \rho_i)\right].
+\label{eq:ce1gg}
+\end{equation}
+%
+Projecting the operator $\left< C_{ei}^{1}\right>$ in \cref{eq:ce1gg} over a Hermite-Laguerre basis similarly to \cref{eq:ceiopjgg}, and using \cref{eq:inversebasistransf}, we obtain
+%
+\begin{equation}
+    C_{ei}^{1pj}=\sum_{l=0}^{p+2j}\sum_{k=0}^{j+\floor{p/2}}\frac{(T^{-1})_{pj}^{lk0}v_{the}^3}{\sqrt{2^p p!}} I_{ei}^{1lk},
+\end{equation}
+%
+where we define
+%
+\begin{equation}
+    I_{ei}^{1lk}=\int \left<C_{ei}^1\right> c_e^l P_l(\cos \varphi) L_k^{l+1/2}(c_e^2) c_e^2 dc_e d\cos \varphi.
+\label{eq:i1lk}
+\end{equation}
+%
+Using the identity between Bessel and Legendre functions, \cref{eq:bessLeg}, and the argument transformation formula between Legendre polynomials
+%
+\begin{equation}
+    L_r(s_{\perp i}^2) = \sum_{k=0}^r \frac{r! L_k(s_{\perp e}^2)}{k!(r-k)!}\frac{(\tau-1)^{r-k}}{\tau^r},
+\end{equation}
+%
+where $\tau=T_i/T_e$, in \cref{eq:i1lk}, a formula for $I_{ei}^{1lk}$ is found
+%
+\begin{align}
+    I_{ei}^{1lk}&=\frac{2 n_i L_{ei}}{v_{the}^4}\int d \mathbf k e^{i \mathbf k \cdot \mathbf R} \frac{e^{-b_i^2}b_i^{2r}}{r!}\left[\sum_{u=0}^r\frac{r!(\tau-1)^{r-u}u_{\parallel i}(\mathbf k)}{(r-u)!u!\tau^r2}\sum_{a=0}^{1+2u}\sum_{b=0}^{u}\left(T^{-1}\right)^{ab0}_{1u}\right.\nonumber\\
+    &\left.+\sum_{d=0}^r \sum_{u=0}^d \frac{i b_i d! (\tau-1)^{d-u}u_{\perp i}(\mathbf k)}{(d-u)!k! \tau^{d+1/2}(r+1)}\mathcal{M}_{su}\sum_{a=0}^{2u}\sum_{b=0}^{u}\left(T^{-1}\right)^{ab0}_{0u}\right]\frac{(k+l+1/2)!}{k!(2l+1)}\delta_{bk}\delta_{la}.
+\end{align}
+%
+where we defined the perpendicular phase-mixing operator $\mathcal{M}_{kj}=(2j+1)\delta_{j,k}-(j+1)\delta_{j+1, k}-j\delta_{j-1 ,k}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Ion-Electron Collision Operator}
+
+The ion-electron collision operator $C_{ie}$, to first order in $m_e/m_i$, is given by \cref{eq:cie}.
+%
+We simplify \cref{eq:cie} using \cref{eq:orderingftildei1}, therefore approximating the distribution function $f_i$ by its gyroaveraged component $f_i \simeq \left<\overline F_i\right>_{\overline{\mathbf R}}$, and retaining the lowest order collision operator in $\epsilon_\delta$.
+%
+The operator we obtain is therefore accurate up to second order in $\epsilon$. 
+%
+This allows us to convert the $C_{ie}$ operator in \cref{eq:cie} to gyrocenter variables $\overline{\mathbf Z}$ using the chain rule at lowest order, yielding
+%
+\begin{align}
+    C_{ie} &= \frac{\mathbf R_{ei}}{m_i n_i v_{th i }}\cdot\left[\overline {\mathbf c_\perp} \frac{m_i v_{thi}^2}{B}\frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline \mu}+\mathbf b \frac{\partial \lb F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\parallel i}}\right]+\nu_{ei}\frac{m_e}{m_i}\frac{n_e}{n_i}\bigg[3 \lb \overline F_i \rb_{\overline{\mathbf R}}\nonumber\\
+    &\left. + \overline s_{\parallel i} \frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\parallel i}} +2\overline \mu \frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline \mu}+ \frac{T_e}{2T_i}\frac{\partial^2 \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\parallel i }^2}+\frac{2 T_e}{B} \frac{\partial}{\partial \overline \mu}\left(\overline \mu \frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline \mu}\right)\right].
+    \label{eq:cie111}
+\end{align}
+%
+In order to take the gyroaverage of \cref{eq:cie111}, we Fourier transform the friction force $\mathbf R_{ei}$ as $\mathbf R_{ei}(\mathbf R) = \int \mathbf R_{ei}(\mathbf k)e^{i \mathbf k \cdot \mathbf R} d \mathbf k$, and use the identity between Bessel functions and associated Laguerre polynomials in \cref{eq:bessLeg}, yielding
+%
+\begin{align}
+    \left<C_{ie}\right> &= \int d \mathbf k \frac{\mathbf R_{ei}(\mathbf k)e^{i \mathbf k \cdot \mathbf R}}{m_i n_i }\cdot\left[\overline s_{\perp i} \mathbf e_2 i J_1(k_\perp \rho_i) \frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\perp i}^2}+\mathbf b J_0(k_\perp \rho_i) \frac{\partial \lb F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\parallel i}}\right]+\nu_{ei}\frac{m_e}{m_i}\frac{n_e}{n_i}\bigg[3 \lb \overline F_i \rb_{\overline{\mathbf R}}\nonumber\\
+    &\left. + \overline s_{\parallel i} \frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\parallel i}} +2\overline s_{\perp i}^2 \frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\perp i}^2}+ \frac{T_e}{2T_i}\frac{\partial^2 \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\parallel i }^2}+\frac{2 T_e}{T_i} \frac{\partial}{\partial \overline s_{\perp i}^2}\left(\overline s_{\perp i}^2 \frac{\partial \lb \overline F_i \rb_{\overline{\mathbf R}}}{\partial \overline s_{\perp i}^2}\right)\right].
+    \label{eq:cie12}
+\end{align}
+%
+Finally, we take Hermite-Laguerre moments of the gyroaveraged ion-electron collision operator $\left<C_{ie}\right>$ in \cref{eq:cie12}, yielding
+%
+\begin{align}
+    C_{ie}^{pj}&=\nu_{ei}\frac{m_e}{m_i}\sum_{lk}B_{lk}^{pj}N_{i}^{lk}-\int d \mathbf k \mathbf R_{ei}(\mathbf k) e^{i \mathbf k \cdot \mathbf R}\sum_{r=0}^{\infty}\frac{b_i^{2r}e^{-b_i^2}}{r!m_i n_i}\cdot\left[\sum_{s=0}^{r+j}d_{rjs}^0 \sqrt{2p}\overline{N}^{p-1 s}\mathbf b\right.\nonumber\\
+    &\left.-\mathbf e_2\sum_{t=0}^{r}\sum_{s=0}^{d+j}i \mathcal{M}_{td} \frac{d_{djs}^0}{r+1}\left[(s+1)\overline N^{ps}-s\overline N^{ps-1}\right]\right],
+\label{eq:ciepj1}
+\end{align}
+%
+with
+%
+\begin{equation}
+\begin{split}
+    B_{lk}^{pj}&=2j\delta_{lp}\delta_{kj-1}\left(1-\frac{T_e}{T_{i}}\right)-(p+2j)\delta_{lp}\delta_{kj}+\sqrt{ p (p-1)}\delta_{l p-2}\delta_{kj}\left(\frac{T_e}{T_{i}}-1\right).
+\end{split}
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+
+In this chapter, a formulation of the full-F gyrokinetic Coulomb collision operator is derived, able to describe the plasma dynamics and turbulence at the tokamak periphery at arbitrary collisionalities.
+%
+This extends the previous full-F Coulomb collision operator derived in \cref{ch:dk} within the drift-kinetic limit to the gyrokinetic regime.
+%
+The Coulomb collision operator derived in the present chapter is expressed in a gyrocenter coordinate system, with parallel and perpendicular velocity integrals of the gyroaveraged distribution function expressed in terms of the $\overline \mu$ and $\overline v_\parallel$ variables.
+%
+The operator in \cref{eq:JiCabgyrok,eq:ccgcgyrok,eq:gyrokma} is valid at all orders of $k_\perp \rho_s$, for distribution functions arbitrarily far from equilibrium and for an arbitrary collisionality regime.
+%
+By expanding the gyroaveraged distribution function into an Hermite-Laguerre basis and evaluating the resulting projection of the gyroaveraged collision operator on the same basis, the collision operator we derive can be coupled to pseudospectral formulations of the gyrokinetic equation, filling a gap in the literature by providing a full-F Coulomb collision operator for gyrofluid models.
+%
+Ultimately, the results of the present chapter provide the theoretical framework needed to perform qualitative and quantitative studies of turbulence, flows, and the evolution of coupled background and fluctuating profiles in the periphery of magnetized fusion devices.

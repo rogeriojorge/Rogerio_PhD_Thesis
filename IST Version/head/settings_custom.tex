@@ -1,0 +1,181 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%		Thesis Settings
+%		Custom settings
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%
+%   Use this file for your own custom packages, command-definitions, etc...
+%
+
+% the following lines are for creating a simplified TO-DO box. However since boites is not per default installed with all latex-distributions, we have removed this example again
+% if you want to use it and do not have "boites" installed, you can get it from here: http://www.ctan.org/tex-archive/macros/latex/contrib/boites
+%
+\usepackage{boites,boites_exemples}
+\newcommand{\todolist}[1]{\begin{boiteepaisseavecuntitre}{TO DO in this chapter} #1 \end{boiteepaisseavecuntitre}}  % creates a little box
+% \newcommand{\todolist}[1]{}  % to be used when to do is not to be printed
+
+% \numberwithin{equation}{section}  % reset equation counters at start of each "section" and prefix numbers by section number
+% \numberwithin{figure}{section}    % reset figure   counters at start of each "section" and prefix numbers by section number
+
+\usepackage{mathtools}
+\usepackage{acronym}
+\usepackage{amsmath,amssymb,amsbsy}
+\usepackage{bbm,bm,mathrsfs,yfonts}
+\usepackage[capitalize]{cleveref}
+\usepackage{float}
+\usepackage{relsize}
+\usepackage{datetime}
+\newdateformat{monthyeardate}{%
+  \monthname[\THEMONTH] \THEYEAR}
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\lb }{\left<}
+\newcommand{\rb }{\right>}
+\renewcommand{\l }{\left}
+\renewcommand{\r }{\right}
+\renewcommand{\O}[1]{\mathcal{O}\l(#1\r)}
+\newcommand{\vtha}{v_{tha}}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\icol}[1]{% inline column vector
+  \left(\begin{smallmatrix}#1\end{smallmatrix}\right)}
+\newcommand{\irow}[1]{% inline row vector
+  \begin{smallmatrix}(#1)\end{smallmatrix}}
+\def\be{\begin{equation}}
+\def\ee{\end{equation}}
+\def\beq{\begin{eqnarray}}
+\def\eeq{\end{eqnarray}}
+\let\oldhat\hat
+\renewcommand{\v}[1]{\mathbf{#1}}
+\renewcommand{\l }{\left}
+%\renewcommand{\r }{\right}
+\renewcommand{\O}[1]{\mathcal{O}\l(#1\r)}
+
+\usepackage[normalem]{ulem}
+\newcommand\redsout{\bgroup\markoverwith{\textcolor{red}{\rule[0.5ex]{2pt}{0.4pt}}}\ULon}
+
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{naturalnames}{hyperref}
+
+%% Bibliography commands from JPP Style
+\RequirePackage{etoolbox}
+\AtEndPreamble{%
+\RequirePackage{natbib}
+}
+\newcommand\bibls{\kern.065em\relax}
+\let\jppthebib\thebibliography
+\let\jppendthebib\endthebibliography
+
+
+
+% Author : Baptiste J. Frei
+% 2018, EPFL
+
+\renewcommand{\vec}[1]{\bm{#1}}
+\newcommand{\E}{\vec{E}}
+\newcommand{\B}{\vec{B}}
+\renewcommand{\j}{J}
+\renewcommand{\r}{\vec{r}}
+\newcommand{\x}{\bm{x}}
+\newcommand{\vi}{\bm{v}}
+\newcommand{\y}{\bm{y}}
+\newcommand{\z}{\bm{z}}
+\newcommand{\A}{\bm{A}}
+\newcommand{\e}{\bm{e}}
+\newcommand{\R}{\bm{R}}
+\newcommand{\U}{\bm{U}}
+\renewcommand{\e}{\bm{e}}
+\renewcommand{\c}{\bm{c}}
+\renewcommand{\a}{\bm{a}}
+\renewcommand{\b}{\vec{b}}
+\newcommand{\bgamma}{\bar{\gamma}}
+\newcommand{\rhoa}{\bm{\rho}_a}
+\renewcommand{\u}{\vec{u}}
+\newcommand{\cperp}{\c'_{\perp}}
+\newcommand{\g}{\bm{g}}
+\newcommand{\Z}{\bm{Z}} 
+
+
+% Mathematical operators 
+\newcommand{\grad}{\nabla}
+\newcommand{\ptheta}{\frac{ \partial }{\partial \theta}}
+\newcommand{\pmu}{\frac{ \partial }{\partial \mu}}
+\newcommand{\pvparallel}{\frac{\partial }{ \partial v_{\parallel}}}
+\renewcommand{\L}{\mathcal{L}}
+
+% Gyrocentre operators
+\newcommand{\gyptheta}{\frac{ \partial }{\partial \overline{\theta}}}
+\newcommand{\gyppparallel}{\frac{ \partial }{\partial \overline{p}_{\parallel}}}
+\newcommand{\gypvparallel}{\frac{ \partial }{\partial \overline{v}_{\parallel}}}
+\newcommand{\gypmu}{\frac{ \partial }{\partial \overline{\mu}}}
+\newcommand{\gygrad}{\overline{\grad}}
+\newcommand{\curvature}{\bm{\kappa}}
+
+% Special functions
+\newcommand{\kernel}[1]{\mathcal{K}_{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\gyaver}[1]{\left<  #1 \right>}
+
+
+% Coordinates and variables
+\newcommand{\sparallel}{\overline{s}_{\parallel a}}
+\newcommand{\sperp}{\overline{s}_{\perp a}}
+\newcommand{\uparallel}{\overline{u}_{\parallel a}}
+\newcommand{\vthparallel}{\overline{v}_{th\parallel a }}
+\newcommand{\vthperp}{\overline{v}_{th \perp a}}
+\newcommand{\Tperp}{\overline{T}_{\perp a}}
+\newcommand{\Tparallel}{\overline{T}_{ \parallel a }}
+\newcommand{\Pperp}{\overline{P}_{\perp a}}
+\newcommand{\Pparallel}{\overline{P}_{ \parallel a }}
+\newcommand{\gyrhoa}{\overline{\bm{\rho}}_a}
+\newcommand{\vparallel}{v_{\parallel}}
+\newcommand{\vperp}{v_{\perp}}
+\newcommand{\vth}{v_{tha}}
+\newcommand{\Qparallel}{Q_{\parallel  a}}
+\newcommand{\Qperp}{Q_{\perp a}}
+\newcommand{\gyU}{\overline{\U}}
+\newcommand{\gyuparallel}{\overline{u}_{\parallel a}}
+\newcommand{\gyvthparallel}{\overline{v}_{th \parallel a}}
+\newcommand{\gyTperp}{\overline{T}_{\perp a}}
+\newcommand{\gyTparallel}{\overline{T}_{\parallel a}}
+\newcommand{\gyR}{\overline{\R}}
+\newcommand{\gymu}{\overline{\mu}}
+\newcommand{\gytheta}{\overline{\theta}}
+\newcommand{\gypparallel}{\overline{p}_{\parallel}}
+\newcommand{\gyvparallel}{\overline{v}_{\parallel}}
+\newcommand{\gyvi}{\overline{\vi}}
+\newcommand{\gyvperp}{\overline{v}_\perp}
+\newcommand{\gyZ}{ \overline{\Z}}
+
+
+% Hermite-Laguerre projector
+\newcommand{\momentstar}[2]{ \norm{#2}^{*#1}_a}
+\newcommand{\ovmomentstar}[2]{ \overline{\norm{#2}}^{*#1}_a}
+\newcommand{\moment}[2]{ \norm{#2}^{#1}_a}
+\newcommand{\momenta}[1]{\norm{#1}_a}
+\newcommand{\momentastar}[1]{\norm{#1}^*_a}
+\newcommand{\phaseV}{\mathcal{V}}
+\newcommand{\phaseM}{\mathcal{M}}
+\newcommand{\T}{\mathcal{T}}         
+
+% Gyro-center densities
+\newcommand{\gyN}{N_a}
+
+% Distribution functions 
+\newcommand{\gyFa}{\overline{F}_a}   
+\newcommand{\gyFe}{\overline{F}_e} 
+\newcommand{\gyFi}{\overline{F}_i} 
+
+% Generating functions
+\newcommand{\gR}{\bm{g}^{\R}}
+\newcommand{\gtheta}{g^{\theta}}
+\newcommand{\gmu}{g^{\mu}}
+\newcommand{\gparallel}{g^{\parallel}}
+\renewcommand{\gg}{\overline{g}}
+\newcommand{\ggR}{\overline{\bm{g}}^{\R}}
+\newcommand{\ggtheta}{\overline{g}^{\theta}}
+\newcommand{\ggmu}{\overline{g}^{\mu}}
+\newcommand{\ggparallel}{\overline{g}^{\parallel}}

@@ -1,0 +1,123 @@
+
+%\let\cleardoublepage\clearpage
+
+% English abstract
+%\cleardoublepage
+\chapter*{Abstract}
+\markboth{Abstract}{Abstract}
+\addcontentsline{toc}{chapter}{Abstract (English/Fran\texorpdfstring{\char231}{c}ais/Português)} % adds an entry to the table of contents
+\begingroup
+
+Despite significant development over the last decades, a model able to describe the periphery region of magnetic confinement fusion devices, extending from the edge to the far scrape-off layer, is still missing. 
+%
+This is because this region is characterized by the presence of turbulent fluctuations at scales ranging from the Larmor radius to the size of the machine, the presence of strong flows, comparable amplitudes of background and fluctuating components, and a large range of collisionality regimes.
+%
+The lack of a proper model has undermined our ability to properly simulate the plasma dynamics in this region, which is necessary to predict the heat flux to the vessel wall of future fusion devices, the L-H transition, and ELM dynamics.
+%
+These are some of the most important issues on the way to a fusion reactor.
+%
+In the present thesis, a drift-kinetic and a gyrokinetic model able to describe the plasma dynamics in the tokamak periphery are developed, which take into account electrostatic fluctuations at all relevant scales, allowing for comparable amplitudes of background and fluctuating components.
+%
+In addition, the models implement a full Coulomb collision operator, and are therefore valid at arbitrary collisionality regimes.
+%
+For an efficient numerical implementation of the models, the resulting kinetic equations are projected onto a Hermite-Laguerre velocity-space polynomial basis, obtaining a moment-hierarchy.
+%
+The treatment of arbitrary collisionalities is performed by expressing the full Coulomb collision operator in guiding-center and gyrocentre coordinates, and by providing a closed formula for its gyroaverage in terms of the moments of the plasma distribution function, therefore filling a long standing gap in the literature.
+%
+The use of systematic closures to truncate the moment-hierarchy equation, such as the semi-collisional closure, allows for the straightforward adjustment of the kinetic physics content of the model.
+%
+In the electrostatic high collisionality regime, our models are therefore reduced to an improved set of drift-reduced Braginskii equations, which are widely used in scrape-off layer simulations.
+%
+The first numerical studies based on our models are carried out, shedding light on the interplay between collisional, using the Coulomb collision operator, and collisionless mechanisms.
+%
+In particular, the dynamics of electron-plasma waves and the drift-wave instability are studied at arbitrary collisionality.
+%
+A comparison is made with the collisionless limit and simplified collision operators used in state-of-the-art simulation codes, where large deviations in the growth rates and eigenmode spectra are found, especially at the levels of collisionality relevant for present and future magnetic confinement fusion devices. 
+
+\vskip0.5cm
+Keywords: Plasma Physics, Nuclear Fusion, Magnetic Confinement, Plasma Turbulence, Plasma Instabilities, Kinetic Theory
+
+% French abstract
+\begin{otherlanguage}{portuguese}
+\cleardoublepage
+\chapter*{Résumé}
+\markboth{Résumé}{Résumé}
+
+Malgré un important développement au cours de ces dernières décennies, un modèle capable de décrire la région périphérique des dispositifs de fusion à confinement magnétique, s'étendant du bord au scrape-off layer, fait toujours défaut.
+%
+En effet, cette région est caractérisée par la présence de fluctuations turbulentes sur des échelles allant du rayon de Larmor à la taille de la machine, de forts flux, d'amplitudes de fluctuation comparables à celles d'équilibre, ainsi que d'une large gamme de régimes de collisionnalité.
+%
+L’absence d’un modèle approprié a compromis notre capacité à simuler correctement la dynamique du plasma
+dans cette région, ce qui est nécessaire pour prévoir le flux de chaleur vers la paroi des futurs dispositifs de fusion, la transition L-H, ainsi que la dynamique des ELMs, qui sont parmi les
+plus importants obstacles sur la voie d’un réacteur à fusion.
+%
+Dans la présente thèse, un modèle de dérive-cinétique et un modèle gyrocinétique capables de décrire la dynamique du plasma dans la périphérie du tokamak sont développés.
+%
+Ces modèles prennent en compte les fluctuations électrostatiques à toutes les échelles d’intérêt, permettant ainsi aux niveaux de fluctuations d'être comparables aux valeurs d'équilibre.
+%
+De plus, les modèles présents possèdent un opérateur de collision de Coulomb exact permettant son application à des niveaux arbitraires de collisionnalité.
+%
+Pour une implémentation numérique efficace du modèle, l’équation cinétique résultante est projetée sur l’espace des vitesses par le truchement d'une base polynomiale d'Hermite-Laguerre, établissant ainsi une hiérarchie de moments.
+%
+Le traitement des niveaux arbitraires de collisionnalité s’effectue en exprimant l’opérateur de Coulomb dans les coordonnées d’espace de phase correspondant au centre de guidage et au gyrocentre, en fournissant ainsi une relation fermée pour sa gyro-moyenne en fonction des moments de la fonction de distribution du plasma, comblant un vide persistant de longue date dans la littérature.
+%
+L’utilisation de troncatures systématiques pour l’équation de la hiérarchie des moments, telle que la troncature semi-collisionnelle, permet un ajustement simple du contenu cinétique et physique du modèle.
+%
+Dans le régime électrostatique hautement collisionnel, notre modèle se réduit à une version améliorée des équations de dérive de Braginskii, qui sont largement utilisées dans les simulations numériques de la dynamique du plasma au bord des réacteurs à fusion.
+%
+Les premières études numériques basées sur notre modèle sont réalisées, mettant en lumière l’interaction entre les mécanismes liés aux différents niveaux de collision grâce à l'utilisation de l'opérateur de Coulomb.
+%
+En particulier, nous étudions la dynamique des ondes électron-plasma et l’instabilité des ondes de dérive dans des niveaux de collisionnalité arbitraires.
+%
+Une comparaison est ainsi réalisée avec différents opérateurs de collision simplifiés et avec la limite non
+collisionnelle, utilisés dans les codes de simulation les plus avancés.
+%
+En effet, ceux-ci produisent des écarts importants dans les taux de croissance et les spectres des modes propres, en particulier aux niveaux intermédiaires de collisionnalité qui sont importants pour les réacteurs
+de fusion par confinement magnétique actuels et futurs.
+
+
+\vskip0.5cm
+Mots clefs: Physique des Plasmas, Fusion Nucléaire, Confinement Magnétique, Turbulence de Plasma, Instabilités des Plasmas, Théorie Cinétique
+
+\end{otherlanguage}
+
+% Portuguese abstract
+\begin{otherlanguage}{portuguese}
+\cleardoublepage
+\chapter*{Resumo}
+\markboth{Resumo}{Resumo}
+
+\hspace{-1cm}
+
+Apesar de nas últimas décadas se ter verificado um desenvolvimento significativo, ainda não foi concebido um modelo capaz de descrever a região periférica de máquinas de fusão por confinamento magnético, estendendo-se desde o bordo até à scrape-off layer.
+%
+A dificuldade reside no facto de esta região ser caracterizada pela presen{\char231}a de flutua{\char231}ões turbulentas a escalas espaciais muito distintas, compreendidas entre o raio de Larmor dos eletrões e a dimensão da máquina, pela presen{\char231}a de fortes fluxos de plasma, por componentes de equilíbrio e flutuantes de amplitude comparável, e por uma ampla gama de regimes colisionais.
+%
+A ausência de um modelo adequado tem posto em causa a nossa habilidade para simular corretamente a dinâmica do plasma nesta região, sendo tal necessário para prever o fluxo de calor na parede de máquinas de fusão futuras, a transi{\char231}ão L-H, e a dinâmica de ELMs.
+%
+Estas são algumas das questões mais importantes no caminho para um reator de fusão.
+%
+Na presente tese, um modelo de deriva-cinética e um modelo girocinético capazes de descrever a dinâmica de plasma na periferia do tokamak são desenvolvidos, levando em conta flutua{\char231}ões eletrostáticas a todas as escalas relevantes, permitindo componentes de equilíbrio e flutuantes de amplitude comparável.
+%
+Além disso, os modelos implementam um operador de colisão de Coulomb completo, sendo assim válidos para regimes de colisionalidade arbitrária.
+%
+De modo a obter uma implementa{\char231}ão numérica dos modelos, a equa{\char231}ão cinética obtida é projetada numa base polinomial de Hermite-Laguerre no espa{\char231}o das velocidades, obtendo assim uma hierarquia de momentos.
+%
+O tratamento de colisionalidades arbitrárias é feito expressando o operador de colisão de Coulomb em coordenadas de centro-guia e de girocentro, fornecendo assim uma fórmula fechada para a sua média de gira{\char231}ão em termos de momentos da fun{\char231}ão de distribui{\char231}ão, colmatando assim uma lacuna de longa data na literatura.
+%
+O uso de fechos sistemáticos para truncar a equa{\char231}ão de hierarquia de momentos, tais como o fecho semi-colisional, permite uma sele{\char231}ão imediata do conteúdo de física cinética contida no modelo.
+%
+Num regime eletrostático de alta colisionalidade, o nosso modelo reduz-se a um conjunto melhorado de equa{\char231}ões de deriva reduzidas de Braginskii, que têm sido amplamente utilizadas em simula{\char231}ões da scrape-off layer.
+%
+Os primeiros estudos numéricos baseados no nosso modelo são apresentados, levando assim à compreensão de alguns pontos essenciais sobre a intera{\char231}ão entre mecanismos não colisionais e colisionais, utilizando um operador de colisão de Coulomb adequado.
+%
+Em particular, estudamos a dinâmica de ondas de plasma eletrónicas e a instabilidade de ondas de deriva a colisionalidades arbitrárias.
+%
+Uma compara{\char231}ão é feita com o limite não colisional e operadores de colisão simplificados utilizados em códigos de simula{\char231}ão atuais, onde grandes desvios nas taxas de crescimento e espetro de modos próprios são encontrados, especialmente a níveis de colisionalidade relevantes para máquinas de confinamento magnético presentes e futuras.
+
+\vskip0.5cm
+Palavras-chave: Física de Plasmas, Fusão Nuclear, Confinamento Magnético, Turbulência de Plasma, Instabilidades de Plasma, Teoria Cinética
+\end{otherlanguage}
+
+\endgroup			
+\vfill

@@ -1,0 +1,74 @@
+\chapter{Conclusions and Outlook}
+\label{ch:conclusion}
+
+This thesis focuses on the plasma dynamics at the tokamak periphery.
+%
+Despite its importance for the success of the magnetic confinement fusion program, the development of a model for the tokamak periphery has been hindered by the fact that this region is characterized by fluctuation levels of order unity, by the presence of both closed and open magnetic flux surfaces, and by a wide range of temperatures and densities that result in a wide range of collisionalities.
+%
+These challenges, as shown in the present thesis, can be overcome by the use of moment expansion methods with a suitable set of basis functions that allows a convenient expression of the integro-differential Coulomb collision operator.
+
+In \cref{ch:dk}, a moment-hierarchy model is developed from a first-principles based, full-F, drift-kinetic model, suitable to describe the plasma dynamics in the SOL region of tokamak devices at arbitrary collisionality.
+%
+Taking advantage of the separation between the turbulent and gyromotion scales, a gyroaveraged Lagrangian and its corresponding equations of motion are obtained.
+%
+The gyroaveraged distribution function is then expanded into a Hermite-Laguerre basis, and the coefficients of the expansion are related to the lowest-order gyrofluid moments.
+%
+The fluid moment expansion of the Coulomb operator in terms of irreducible Hermite polynomials is reviewed, and its respective particle moments are written in terms of coefficients of the Hermite-Laguerre expansion, relating both expansions.
+%
+This allows us to express analytically the moments of the collision operator in terms of guiding-center moments.
+%
+A moment-hierarchy that describes the evolution of the guiding-center moments is derived, together with a Poisson's equation accurate up to second order.
+%
+The resulting set of equations is then used to derive a fluid model in the high collisionality limit.
+%
+The results of this chapter are published in \citet{Jorge2017}.
+
+In \cref{ch:gk}, a full-F gyrokinetic moment-hierarchy able to evolve the turbulent plasma dynamics in both the tokamak edge and SOL regions is derived.
+%
+Taking advantage of the spatial scale separation between turbulent fluctuations and magnetic field gradients, and the low-frequency of the fluctuations compared to the ion gyrofrequency, a single-particle Lagrangian is obtained using two successive noncanonical coordinate transformations in order to take into account fluctuations present at the $k_\perp \rho_s$ scale.
+%
+Such transformations are derived using Lie transform perturbation theory.
+%
+The resulting gyrokinetic equation is then projected onto a Hermite-Laguerre polynomial basis, allowing us to express the gyroaverage of plasma quantities in a closed analytical form.
+%
+The electrostatic fields are evolved using a gyrokinetic formulation of Maxwell's equations, expressed in terms of coefficients of the moment-hierarchy expansion coefficients.
+
+\cref{ch:op} complements the gyrokinetic moment-hierarchy model of \cref{ch:gk} by deriving a moment-hierarchy formulation of the full-F gyrokinetic Coulomb collision operator, valid in both the electrostatic and in the electromagnetic regime.
+%
+The Coulomb collision operator at arbitrary $k_\perp \rho_i$ is ported to a phase-space coordinate system suitable to describe magnetized plasmas, i.e., to guiding-center and gyrocenter coordinate systems, and projected onto a Hermite-Laguerre basis.
+%
+This allows us to describe the plasma dynamics and turbulence in the tokamak periphery at arbitrary collisionalities and fills a gap in the literature by providing full Coulomb moments for full-F gyrofluid models.
+
+%In \cref{ch:4ddk}, 
+
+In \cref{ch:epw}, following \citet{Jorge2018a}, the effect of full Coulomb collisions on electron-plasma waves is studied by taking into account both electron-electron and electron-ion collisions.
+%
+The proposed framework is particularly efficient, as the number of polynomials needed in order to obtain convergence is low enough to allow multiple scans to be performed, particularly a comparison between several collision operators at arbitrary collisionalities.
+%
+While the use of electron-ion collisions {alone} leads to a damping rate slightly smaller than the one evaluated with the full Coulomb operator, the damping rate using a Lenard-Bernstein or a Dougherty collision operator yields deviations up to 50\% larger with respect to the Coulomb one.
+%
+An eigenmode analysis reveals major differences between the spectrum of full Coulomb and simplified collision operators.
+%
+In addition, the eigenspectrum shows the presence of purely damped modes that correspond to the entropy mode.
+%
+We demonstrate that the entropy mode needs a full Coulomb collision operator for its proper description, deriving an analytical dispersion relation for the entropy mode that accurately reproduces the numerical results.
+
+Finally, in \cref{ch:dwi}, the linear properties of the drift-wave instability are described at arbitrary collisionalities for the first time.
+%
+The analysis shows that the corrections introduced by the full Coulomb collision operator with respect to simplified collision operators, presently used in state-of-the-art codes, are qualitatively and quantitatively significant at the relevant collisionality regime of operation of future nuclear fusion devices such as ITER.
+%
+Indeed, the drift-wave growth rate is seen to deviate by factors of order unity from fluid and kinetic models based on simplified collision operators. 
+%
+The results of \cref{ch:dwi} are published in \citet{Jorge2018}.
+
+With the present work, a crucial step towards a predictive model of tokamak turbulence has been accomplished.
+%
+Although the ordering used in this work when deriving the gyrokinetic moment-hierarchy equation is, in principle, applicable to describe the plasma dynamics in the whole machine, we focus on the tokamak periphery region as collisions are expected to limit the number of terms in the expansion needed, making moment-expansion simulations more efficient than standard numerical methods.
+%
+As a first step of the numerical implementation of the proposed models, we have considered its linear version.
+%
+However, plasma dynamics at the tokamak periphery is essentially turbulent, therefore requiring the development of nonlinear simulations.
+%
+In this setting, future extensions of the present work should include the development of sheath boundary conditions for moment-hierarchy non-linear simulations.
+%
+Finally, in order to properly address the treatment of peeling-ballooning modes and the drift-Alfvén coupling in the edge region, an extension of the model derived here to include electromagnetic perturbations will be addressed in a future publication \citep{Frei2019}.

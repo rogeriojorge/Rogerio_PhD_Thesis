@@ -1,0 +1,920 @@
+\chapter{A full-F Gyrokinetic Model for the Tokamak Periphery}
+\label{ch:gk}
+
+As described in \cref{ch:dk}, the plasma dynamics in the scrape-off layer region of fusion devices is, in general, characterized by turbulent structures with length scales larger than the ion Larmor radius.
+%
+However, inside the separatrix, in the edge region, the plasma is hotter and less collisional than in the scrape-off layer.
+%
+Moreover, in the edge region, small-scale $k_\perp \rho_s \sim 1$ fluctuations become important \citep{Hahm2009}.
+%
+This is especially relevant in the high-temperature tokamak H-mode regime \citep{Zweben2007}, the regime of operation relevant for ITER and future devices.
+%
+Despite recent progress \citep{Chang2017,Shi2017}, overcoming the limitation of the drift-reduced fluid models in modelling of the tokamak periphery region by using a gyrokinetic model valid at $k_\perp \rho_i \sim 1$ has proven to be exceptionally demanding, mainly because plasma quantities such as density and temperature, and associated plasma collisionality, can span a wide range of values and the relative level of fluctuations in this region can be of order unity \citep{Scott2002}.
+%
+In order to overcome the numerical complexity associated with the modelling of small-scale fluctuations at the tokamak periphery, in this chapter, we extend the drift-kinetic moment-hierarchy derived in \cref{ch:dk} to the gyrokinetic regime.
+
+By taking advantage of the low-frequency character of plasma turbulence in magnetized plasma systems, gyrokinetic theory effectively removes the fast time scale associated with the cyclotron motion and reduces the dimensionality of the kinetic equation from six phase-space variables, ($\mathbf x, \mathbf v$), to five.
+%
+While linear and nonlinear gyrokinetic equations of motion were originally derived using asymptotic techniques \citep{Taylor1968,Rutherford1968a,Catto1978a}, more recent derivations of the gyrokinetic equation based on Hamiltonian Lie perturbation theory \citep{Cary1981} ensure the existence of phase-space volume and magnetic moment conservation laws \citep{Hahm1988a,Brizard2007a,Hahm2009,Frei2019}, and are the ones followed in this chapter for the derivation of the gyrokinetic model.
+
+As both large scale and amplitude fluctuations (particularly in the H-mode pedestal), and small scale and amplitude fluctuations $k_\perp \rho_s \sim 1$ are at play in the tokamak periphery, we split the electrostatic potential $\phi=\phi_0+\phi_1$ into its large-scale component $\phi_0$ satisfying
+%
+\begin{equation}
+    \frac{e \phi_0}{T_e} \sim 1,
+\end{equation}
+%
+and its small-scale $\phi_1$ component
+%
+\begin{equation}
+    \frac{\phi_1}{\phi_0} \sim \epsilon_\delta \ll 1.
+\label{eq:phi10}
+\end{equation}
+%
+Both $\phi_0$ and $\phi_1$ are set to yield a similar contribution to the total electric field
+%
+\begin{equation}
+    \mathbf E \sim \nabla_\perp \phi_0 \sim \nabla_\perp \phi_1.
+\label{eq:ephi10}
+\end{equation}
+%
+We order typical gradient lengths of $\phi_1$ to be comparable to $\rho_s$, that is
+%
+\begin{equation}
+    \rho_s \left|\frac{\nabla_\perp \phi_1}{\phi_1}\right| \sim 1,
+\label{eq:kperprhos1}
+\end{equation}
+%
+which, using \cref{eq:phi10,eq:ephi10}, constraints typical gradient lengths of $\phi_0$ to be much larger than $\rho_s$, as
+%
+\begin{equation}
+    \rho_s \left|\frac{\nabla_\perp \phi_0}{\phi_0}\right| \sim \epsilon_\delta.
+\label{eq:kperprhos2}
+\end{equation}
+%
+In the following, we set $\epsilon_\delta \sim \epsilon$.
+%
+We note that the use of the sound Larmor radius $\rho_s$ instead of the ion Larmor radius $\rho_i$ in \cref{eq:kperprhos1,eq:kperprhos2} allows us to describe the dynamics of both cold ion and hot ion plasmas.
+%
+Finally, similarly to \cref{eq:orderingnu}, the collision frequency is ordered as
+%
+\begin{equation}
+    \frac{\nu_e}{\Omega_i}\sim \epsilon_\nu < \epsilon,
+\label{eq:orderingcoll}
+\end{equation}
+%
+with $\nu_e=\nu_{ei}$ the electron-ion collision frequency.
+
+The Hamiltonian approach we use to derive the gyrokinetic equation is usually carried out in two steps.
+%
+In the first step, small-scale electrostatic fluctuations with perpendicular wavelengths comparable to the particle Larmor radius are neglected \citep{Cary2009}.
+%
+Within this approximation, the coordinate transformation from particle phase-space coordinates ($\mathbf x, \mathbf v)$ to guiding-center coordinates $\mathbf Z = (\mathbf R, v_\parallel, \mu, \theta)$ is derived, where $\mathbf R$ is the guiding-center, $v_\parallel$ the parallel velocity, $\mu$ the adiabatic invariant, and $\theta$ the gyroangle.
+%
+To first order, and in the electrostatic limit, this procedure yields the Lagrangian derived in \cref{ch:dk}, \cref{eq:lagSOL}.
+%
+The second step introduces small-scale and small-amplitude electrostatic fluctuations $\phi_1$.
+%
+A gyrocenter coordinate system $\overline{\mathbf Z}=(\overline{\mathbf R},\overline{v}_\parallel, \overline{\mu}, \overline{\theta})$ is then constructed perturbatively from the guiding-center coordinates $\mathbf Z$ via a transformation $T$ of the form
+%
+\begin{equation}
+    \overline{\mathbf Z} = T \mathbf Z = \mathbf Z + \epsilon_\delta \mathbf Z_1 + ...,
+\label{eq:gyrotransf}
+\end{equation}
+%
+such that $\overline \mu = T \mu = \mu + \epsilon_\delta \mu_1 + ...$ remains an adiabatic invariant.
+%
+This allows us to reduce the number of phase-space variables in the kinetic Boltzmann equation describing the evolution of the particle distribution function from six to five, simplifying the analytical and numerical treatment of magnetized plasma systems.
+
+Similarly to \cref{ch:dk}, we consider a plasma composed of both electrons and ions, with distribution functions arbitrarily far from thermal equilibrium with electrostatic fluctuations only, i.e., $\partial_t \mathbf A =0$.
+%
+In order to allow both $e \phi/T_e \sim 1$ fluctuations with $k_\perp \rho_s \ll 1$ and $e \phi/T_e \ll 1$ fluctuations with $k_\perp \rho_s\sim 1$, we order
+%
+\begin{equation}
+    \epsilon \sim \frac{v_{\mathbf E \times \mathbf B}}{c_s} \sim k_\perp \rho_s \frac{e \phi}{T_e} \sim \frac{k_\parallel}{k_\perp} \ll 1.
+\label{eq:ordering1}
+\end{equation}
+%
+We focus on the collisionless part of the plasma dynamics, while the development of a gyrokinetic collision operator is performed in \cref{ch:op}.
+%
+The derivation of the gyrokinetic model is presented in \cref{sec:gksingpar}.
+%
+In \cref{sec:mhgk}, a moment-hierarchy formulation of the gyrokinetic equation is derived, by expanding the distribution function in Hermite-Laguerre polynomials.
+%
+In \cref{sec:megk}, the system of equations is closed by deriving the gyrokinetic Maxwell's equations in terms of coefficients of the Hermite-Laguerre expansion of the distribution function.
+%
+The conclusions follow.
+
+\section{Derivation of the Gyrokinetic Equation}
+\label{sec:gksingpar}
+
+We start from the guiding-center Lagrangian $L_{0a}$ of a charged particle moving under the effect of an electromagnetic field derived in \cref{ch:dk}, \cref{eq:lagSOL}, and write the guiding-center Lagrangian one-form $\gamma_{0a}=L_{0a} dt$ as
+%
+\begin{equation}
+    \gamma_{0a}=q_a \mathbf A^{*} \cdot d \mathbf R+\mu \frac{m_a}{q_a}d \theta-\left(q_a \phi_0^{*}+\frac{m_a v_\parallel^2}{2}\right)dt=\mathbf \Lambda_{0a} \cdot d \mathbf Z-H_{0a} dt,
+\label{eq:lagdk}
+\end{equation}
+%
+where we defined the vector $\mathbf \Lambda_{0a}$ as $\mathbf \Lambda_{0a} = \left(q_a \mathbf A_0^{*}, 0, 0, \mu \frac{m_a}{q_a}\right)$ and the Hamiltonian $H_{0a} = q_a \phi_0^{*}+m_a v_\parallel^2/2$, with $\phi_0^{*}$ and $\mathbf A_0^{*}$ the quantities defined in \cref{eq:phis,eq:As}, respectively.
+%
+%In the following, for simplicity, we drop the species subscript $a$.
+%
+The drift-kinetic equation of motion derived using the Euler-Lagrange equations in \cref{ch:dk}, can also be derived by setting to zero the variation of the action $A_{0 a} = \int \gamma_{0 a}$.
+
+In order to include perturbations at the Larmor radius scale, the electrostatic field $\phi_1(\mathbf x)$, neglected in the derivation of \cref{eq:lagSOL}, is now added to \cref{eq:lagdk}, i.e., we add the term $-q \phi_1$ present in the  particle Lagrangian in \cref{eq:lagrangian}.
+%
+Therefore, the resulting Lagrangian one-form including guiding-center dynamics and gyrokinetic perturbations is given by
+%
+\begin{equation}
+    \gamma_a = \mathbf \Lambda_{0a} \cdot \mathbf Z-H_{0a} dt-q \phi_1 dt=\mathbf \Lambda_a \cdot d \mathbf Z - H_a dt.
+\label{eq:gammatott}
+\end{equation}
+%
+We note that due to the presence of $\phi_1(\mathbf x)=\phi_1(\mathbf R + \mathbf \rho)$ in the Hamiltonian $H_a$, the Lagrangian in \cref{eq:gammatott} is no longer gyroangle independent.
+%
+In order to reduce the Lagrangian $\gamma_a$ from a six dimensional phase-space dependence $\mathbf Z$ to a five dimensional dependence, we perform a coordinate transformation to a new coordinate system $\overline{\mathbf Z}=(\gyR,\gymu,\gyvparallel,\gytheta)$ in such a way that the gyrophase dependence of $\gamma_a$ in $\overline \theta$ is removed.
+%
+Under a change of coordinates $\overline{\mathbf Z}= T \mathbf Z$, given perturbatively by \cref{eq:gyrotransf}, the Lagrangian $\gamma_a$ is given by
+%
+\begin{equation}
+    \gamma_a = \sum_i \mathbf \Lambda_a \cdot \frac{\partial \mathbf Z}{\partial \overline{ Z}_i} d \overline{ Z}_i-H_a dt.
+\end{equation}
+%
+Therefore, by defining the vector
+%
+\begin{equation}
+    \overline{\Lambda}_i= \mathbf \Lambda \cdot \frac{\partial \mathbf Z}{\partial \overline{ Z}_i},
+\label{eq:covlambda}
+\end{equation}
+%
+the Lagrangian $\overline \gamma_a$ in the new coordinate system can be written as
+%
+\begin{equation}
+    \overline \gamma_a = \overline{\mathbf \Lambda_a}\cdot d \overline{\mathbf Z}-H_a dt.
+\label{eq:ovgamma}
+\end{equation}
+%
+Equation (\ref{eq:covlambda}) shows that the vector $\Lambda_a$ and, in general, the Lagrangian one-form $\gamma_a$, transform as covariant vectors under a change of coordinates.
+%
+As the coordinate transformation $T$ is dependent on the phase-space coordinates $\mathbf Z$, the change of basis in \cref{eq:covlambda} is, in general, difficult to evaluate for an arbitrary coordinate transformation.
+%
+However, as noted by \citet{Deprit1969}, leveraging the fact that $T$ is a near-identity transformation [see \cref{eq:gyrotransf}], the $\overline{\mathbf \Lambda}_a$ vector can be expanded as $\overline{\mathbf \Lambda}_a=\sum_n \epsilon^n \overline{\mathbf \Lambda}_{an}$, and a recursion relation for the $\overline{\mathbf \Lambda}_{an}$ components can be found.
+%
+This near-identity transformations, in the context of perturbation theory, were formulated as Lie transforms by Deprit and are introduced in the next section.
+
+\subsection{Lie Transform Perturbation Theory}
+\label{LieTransformPerturbationTheory}
+
+We present the formalism we use to perform the coordinate transformation from $\mathbf Z$ to $\overline{\mathbf Z}$, i.e. a perturbation approach known as Lie transform perturbation theory \citep{Deprit1969,Cary1981,Littlejohn1981,Brizard2009}.
+%
+This formalism allows us to convert a one form $\gamma=\gamma_\nu dz^\nu$ with a symplectic part $\mathbf \Lambda$ and Hamiltonian part $H$ such that $\gamma_\nu=(\Lambda,-H)$ and $z^\nu=(\mathbf z^i,t)$, to a new one-form $\Gamma = \Gamma_\nu dZ^\nu$ with new set of coordinates $Z^{\nu}$.
+%
+We remark that $\gamma$ and $\Gamma$ are two arbitrary one-forms that are linked by a coordinate transformation, and that $\nu$ runs from 1 to 6+1, since it includes the time component $t$ of the transformation, whereas the index $i$ runs from 1 to 6.
+%
+We look for a near-identical coordinate transformation around the small parameter $\epsilon_\delta \sim \epsilon \ll 1$, namely
+%
+\begin{equation} \label{nearidtransformation}
+\Z^{\nu} = \phi_+^\nu\left( \z^\nu, \epsilon\right) = \sum_{n=0}^{\infty}  \frac{\epsilon^n}{n!} \frac{\partial^n  \phi_+^\nu\left( \z^\nu, 0 \right)  }{\partial \epsilon^n}  ,
+\end{equation}
+%
+where $\phi_{+}^\nu = \left( \z^\nu, \epsilon\right) $ is the mapping function that specifies the coordinate transformation, such that $\phi_+^\nu(\z^\mu,0) = \z^\nu$.
+%
+In \cref{nearidtransformation}, for a given $\epsilon$, the function $\phi_+^\nu$ transforms the coordinates $\z^\nu$ to the new coordinates $\Z^\nu$.
+%
+Indeed, the coordinates $ \Z^\nu$ are the values of the function $\phi_+^\nu$ evaluated at $(\z^\nu,\epsilon)$.
+%
+Symmetrically, we can define the inverse transformation of \cref{nearidtransformation} by introducing the mapping function $\phi_{-}^\nu( \Z^\nu, \epsilon) $ as
+%
+\begin{equation} \label{inversenearidtransformation}
+\z^\nu = \phi_{-}^{\nu}( \Z^\nu, \epsilon) = \phi_{-}^{\nu}\left(\phi_+^\nu\left( \z^\nu, \epsilon\right), \epsilon\right).
+\end{equation}
+%
+The Lie transform is a special case of \cref{nearidtransformation}, where the function $\phi_+^\nu$ is specified by introducing a generating function, $g^\nu$, such that $\phi_+^\nu$ is solution of
+%
+\begin{equation} \label{defgeneratingfunctions}
+\frac{\partial \phi_+^\nu}{\partial \epsilon}(\z^\nu, \epsilon) = g^\nu\left(\phi_+^\nu(\z^\nu, \epsilon)\right).
+\end{equation}
+%
+We remark that \cref{defgeneratingfunctions} is a functional relation since both sides are evaluated at $(\z^\nu, \epsilon)$ and, therefore, the arguments are dummy variables. An equation for $\phi_-^\nu$ can be obtained by taking the derivative with respect to $\epsilon$ on both sides of \cref{inversenearidtransformation} and using \cref{defgeneratingfunctions}, yielding
+%
+\begin{equation} \label{defgeneratingfunctionsinverse}
+    \frac{\partial \phi_{-}^\nu}{\partial \epsilon}=\frac{d \phi_{-}^\nu}{d\epsilon}-\frac{\partial \phi_+^\mu}{\partial \epsilon}\frac{\partial \phi_-^\nu}{\partial \phi_+^\mu}=- g^\lambda \frac{\partial \phi^\nu_-}{\partial  \Z^\lambda},
+\end{equation}
+%
+where we used the fact that $d  \z^\nu / d \epsilon =0$.
+
+We now deduce the transformation rule of scalar functions induced by a Lie transform specified by \cref{defgeneratingfunctions}.
+%
+Let $f$ be a scalar function of the coordinates $ \z^\nu$ and $F$ a scalar function of the new coordinates $\Z^\nu$ which satisfy $f( \z^\nu) = F( \Z^\nu)$ with $ \Z^\nu =  \phi_+^\nu\left( \z^\nu, \epsilon\right)$, e.g., the guiding-center distribution function in \cref{eq:fguidF}.
+%
+Since the coordinate transformation in \cref{nearidtransformation} depends explicitly on $\epsilon$, the function $F$ will also have an explicit $\epsilon$-dependence.
+%
+Thus, we write
+%
+\begin{equation} \label{scalarinvariance}
+F( \Z^\nu,\epsilon) = f( \z^\nu).
+\end{equation}
+%
+Taking the derivative with respect to $\epsilon$ of \cref{scalarinvariance}, while noticing that $d f / d \epsilon = 0$, and using \cref{defgeneratingfunctions}, we obtain
+%
+\begin{equation} \label{partialFpartialepsilon}
+\frac{\partial F}{\partial \epsilon} = - g^\nu \partial_\nu F \equiv - \L_{g} F.
+\end{equation}
+%
+In \cref{partialFpartialepsilon}, we defined the Lie derivative $\L_g$ of a scalar function as
+%
+\begin{equation} \label{eq:liescalar}
+    \L_{g} \equiv g^\nu  \partial_\nu.
+\end{equation}
+%
+The differential operator $\partial_\nu$ acting on $F$ is defined by 
+%
+\begin{equation}
+\partial_\nu F =  \begin{cases}
+\dfrac{\partial F(\Z^\nu)}{\partial \Z^\nu}, \\	
+\\
+\dfrac{\partial F(\z^\nu)}{\partial \z^\nu}.\end{cases}
+\label{eq:derv1}
+\end{equation}
+%
+Expanding $F( \Z^\nu, \epsilon)$ around $\epsilon$, using \cref{partialFpartialepsilon} to compute the $\epsilon$ derivatives of $F$, and the fact that $F\left(\phi_+^\nu \left( \z^\nu, 0\right),0\right) = F(\z^\nu,0) = f(\z^\nu)$, the functional relation between $F$ and $f$ can be found, yielding
+%
+\begin{equation} \label{pushforward}
+F = e^{ - \epsilon\L_{\g} } f,
+\end{equation}
+%
+From \cref{pushforward}, the functions $F$ and $f$ coincide at $\epsilon =0$.
+%
+The inverse relation follows directly from \cref{defgeneratingfunctionsinverse} by 
+%
+\begin{equation}\label{pullback}
+f= e^{\epsilon \L_{\g} } F.
+\end{equation}
+%
+We emphasize that \cref{pushforward,pullback} are relations between functions, in the sense that their arguments are dummy variables and, therefore, can be evaluated at both $ \z^\nu$ and $\Z^\nu$ [in the sense of \cref{eq:derv1}].
+%
+We refer to \cref{pushforward} as push-forward transformation, and to \cref{pullback} as pull-back transformation \citep{Brizard2009}. 
+
+\Cref{pushforward,pullback} allow us to derive the functional form of the coordinate transformation in \cref{nearidtransformation} as specified by \cref{defgeneratingfunctions}. With the particular choice of scalar functions $F =  \phi_-^\nu$ and $f = I^{\nu}$ [$I^{\nu}$ is the coordinate function, such that $I^\nu(\z^\nu) = \z^\nu =  \phi_-^\nu( \Z^\nu, \epsilon ))$], and evaluating the push-forward transformation in \cref{pushforward} at $ \Z^\nu$, yields
+%
+\begin{equation} \label{inversecoordinatetransformation}
+\z^{\nu} = e^{-\epsilon\L_{g}}  \Z^\nu.
+\end{equation}
+%
+The inverse coordinate transformation of \cref{inversecoordinatetransformation} follows directly from the pull-back transformation in \cref{pullback} with, in particular, $f = \phi_+^\nu$ and $F = I^\nu$ evaluated at $\z^\nu$, that is
+%
+\begin{equation}
+     \Z^\nu = e^{\epsilon\L_{g}} \z^\nu.
+\end{equation}
+
+We now derive the transformation rule of a one-form [e.g., $\gamma$ in \cref{eq:gammatott}] under the transformation in \cref{nearidtransformation}. From the invariance $\Gamma_\nu d  \Z^\nu = \gamma_\nu d \z^\nu$, the components of $\Gamma$ transform as components of a covariant vector, 
+%
+\begin{equation} \label{invarianceGammamu}
+\Gamma_\nu( \Z^\nu,\epsilon) = \frac{\partial \phi_-^\lambda }{\partial  \Z^\nu} ( \Z^\nu,\epsilon)\gamma_\lambda\left( \phi^\nu_- ( \Z^\nu , \epsilon)\right),
+\end{equation}
+%
+with $\Z^\nu = \phi^\nu_+( \z^\nu,\epsilon)$.
+%
+Evaluating the derivative with respect to $\epsilon$ on both sides of \cref{invarianceGammamu}, using \cref{defgeneratingfunctionsinverse}, and finally expanding $\Gamma_\nu( \Z^\nu,\epsilon)$ around $\epsilon$, we find the following functional relation
+%
+\begin{equation} \label{pushforwardoneform}
+\Gamma_\nu = e^{- \epsilon\L_{g}} \gamma_\nu  + \partial_\nu S,
+\end{equation}
+%
+with $S$ a gauge function and $\L_{g}$ the Lie-derivative acting on a one-form $\Gamma$.
+%
+The $\nu$ component of the Lie-derivative acting on a one-form is given by
+%
+\begin{equation} \label{Lieoneform}
+(\L_{g} \gamma)_\nu  = g^\lambda \left(\partial_\lambda \gamma_\nu  - \partial_\nu \gamma_\lambda \right).
+\end{equation}
+%
+The gauge function $S$ reflects the invariance of the action ${A} = \int  \Gamma$ under the addition of a total derivative.
+%
+We remark that the Lie derivative in \cref{Lieoneform} does not correspond to the one in \cref{eq:liescalar}, as they act on different mathematical objects.
+%
+\Cref{pushforward,pushforwardoneform} define the transformations of scalar functions and one-forms induced by the Lie transform associated with the generating function $g^\nu$. 
+
+In a perturbative approach, a change of coordinates is performed at a particular order in $\epsilon$, with the goal of averaging out the high-frequency components in the particle dynamics at each $n$th-order in the expansion.
+%
+Therefore, we define $\L_{n} \equiv \L_{g_n}$ as a shorthand notation to the Lie-derivative associated with the generating function $g_n^\nu$, and introduce the successive change of coordinates,
+%
+\begin{equation}
+    \mathbf \Z^\nu  \equiv T_{\epsilon} \z^{\nu} = \prod_{n=1}^{\infty} e^{ \epsilon^n  \mathcal{L}_{n} } \mathbf z^\nu.
+\end{equation}
+%
+Thus, we obtain the second-order accurate coordinate transformation evaluated at $\z^\nu$ by expanding $T_{\epsilon}=e^{\epsilon L_1+\epsilon^2 L_2+...}$ in $\epsilon$ and, using \cref{eq:liescalar}, yielding
+%
+\begin{equation} \label{Znu}
+  \Z^{\nu}  = \z^{\nu} + \epsilon g_1^\nu(\z^{\nu}) + \epsilon^2 \left[ \frac{1}{2}g_1^\lambda(\z^{\nu}) \partial_\lambda g_1^\nu(\z^{\nu})  + g_2^\nu(\z^{\nu}) \right] + O(\epsilon^3).
+\end{equation}
+%
+Applying the same procedure for the one-form $\Gamma = \sum_{n} \Gamma_n$, the recursion relations for the component $\Gamma_n$, obtained from the one-form $\gamma = \sum_n \gamma_n$, are given by
+%
+\begin{subequations}
+\label{systemorderbyorder}
+\begin{align}
+\Gamma_0 &= \gamma_0 + d S_0, \label{systemorderbyorder0}\\
+\Gamma_1 &= \gamma_1 - \L_1 \gamma_0 + d S_1 , \label{systemorderbyorder1} \\
+\Gamma_2 &= \gamma_2 - \L_1 \gamma_1  + \left( \frac{1}{2} \L_1^2 - \L_2\right) \gamma_0 + d S_2, \label{systemorderbyorder2} \\
+\Gamma_3 & = \gamma_3 - \L_1 \gamma_2 - \L_3 \gamma_0 - \L_2 \Gamma_1 + \frac{1}{3} \L_1^2\left( \gamma_1 + \frac{1}{2} \Gamma_1 \right) + d S_3,  \label{systemorderbyorder3}\\
+\vdots \nonumber 
+\end{align}
+\end{subequations}
+%
+In \cref{systemorderbyorder}, the Lie-derivatives act on one-forms and are, therefore, defined by the relation in \cref{Lieoneform}.
+ 
+In the following, we use Lie transform perturbation theory and solve the hierarchy in \cref{systemorderbyorder} to obtain the gyrocenter one-form ${\Gamma}(\gyR,  \gyvparallel,\gymu)$ from the guiding-center one-form $\gamma$ in \cref{eq:gammatott} up to second order in $\epsilon$.
+%
+We note that the inherent degrees of freedom in choosing the generating functions $g^\nu_n$ allow for different expressions of $\Gamma$ found in the literature, depending on the imposed constraints on the one-form and on the lowest order guiding-center Lagrangian \citep[see, e.g.,][]{Brizard2007a,Hahm2009,Dimits2012,Tronko2016}.
+
+\subsection{Gyrocenter Transformation}
+\label{GyrocenterTransformation}
+
+We now construct the gyrocenter coordinates $\overline{ \Z} = ( \gyR, \gyvparallel,\gymu, \gytheta )$ in order to obtain a gyrophase independent Lagrangian one-form ${\Gamma} = {\Gamma}_i d \overline{ \Z}^i - \overline{H}dt$ and, as a consequence, retain the dynamical conservation of $\gymu$.
+%
+While the use of Lie-transforms to derive a gyrocenter coordinate system from a drift-kinetic Lagrangian is standard in gyrokinetic literature, here, for the first time, we apply Lie-transforms to the Lagrangian derived in \cref{ch:dk}.
+%
+The gyrocenter one-form ${\Gamma}$ is derived by using Lie transform perturbation theory up to second-order in the small parameter $\epsilon$.
+%
+However, we show that only a $O(\epsilon)$ coordinate transformation in \cref{Znu} is sufficient to obtain a second order accurate equation for the evolution of the gyrocenter distribution function.
+%
+The kinetic equation we obtain allows us to describe the plasma dynamics in the tokamak periphery in the presence of electrostatic fluctuations at the particle Larmor radius scale, and retain $k_\perp \rho_s$ effects at arbitrary order.
+
+Following \cref{eq:gammatott}, we write the perturbed guiding-center one-form $\gamma$ as $\gamma = \gamma_0 + \epsilon \gamma_1$ in the guiding-center coordinate system $\mathbf Z$, with
+%
+\begin{equation}
+    \gamma_{0}=\mathbf \Lambda_{0a} \cdot d \mathbf Z-H_{0a} dt,
+\end{equation}
+%
+and
+%
+\begin{equation}
+    \gamma_1 = - q \phi_1 dt.
+\end{equation}
+
+We take advantage of the degrees of freedom in the choice of the gyrocenter generating functions, denoted by $\overline{g}^\nu_{1}$ and $\overline{g}_2^\nu$, to impose that only $H$ gets modified in the coordinate transformation, while the symplectic part $\mathbf \Lambda$ retains its form.
+%
+The resulting Lagrangian is then evaluated at $\overline{\mathbf Z}$.
+%
+This is usually referred to as the Hamiltonian formulation of gyrokinetics since it includes gyrokinetic fluctuations in the Hamiltonian component of the one-form only \citep{Brizard2007a,Miyato2011}.
+%
+Therefore, we impose that for $\overline{\mathbf \Lambda}=\sum_n \epsilon^n \overline{\mathbf \Lambda}_n$, the components $\overline{\mathbf \Lambda}_n$ vanish for $n\geq1$.
+%
+Additionally, by requiring that $\Gamma$ is gyrophase independent, we impose $\partial_\theta \overline{H} =0$.
+%
+These two rules are referred to as gyrocenter transformation rules.
+%
+The Hamiltonian formulation is advantageous since the guiding-center Jacobian, $ B_{\parallel}^* / m$, is not perturbed by the small-scale fluctuations, such that it preserves its functional form, i.e. 
+%
+\begin{equation}
+\frac{B_{\parallel}^*(\mathbf R)}{m_a}  d \R d \vparallel d \mu d \theta  =\frac{B_{\parallel}^*(\overline{\mathbf R})}{m_a}  d \gyR d \gyvparallel d \gymu d \gytheta.
+\end{equation}
+
+We solve now the hierarchy in \cref{systemorderbyorder} up to second-order in $\epsilon_\delta$.
+%
+From the zeroth-order transformation, \cref{systemorderbyorder0}, we find ${\Gamma}_0 = \gamma_0$ with $S_0 =0$ and retrieve the guiding-center dynamics at lowest-order in $\epsilon$.
+%
+The first order gyrocenter correction ${\Gamma}_1$, given by \cref{systemorderbyorder1}, is obtained by computing the Lie-derivative of $\gamma_0$ according to \cref{Lieoneform}.
+%
+This yields
+%
+\begin{equation} \label{overlineGamma1full}
+\begin{aligned}
+{\Gamma}_{1}& = \left( q_a\gR_1 \times \B^*- m_a \gparallel_1 \b + \grad S_1 \right) \cdot d \R +
+ \left( m_a \gR_1 \cdot \b  + \frac{\partial S_1}{\partial v_{\parallel}} \right) d v_\parallel  \\
+& +  \left(
+ \frac{\partial S_1}{\partial \theta} - \frac{m_a}{q_a } \gmu_1  \right) d \theta +
+\left( \frac{m_a  }{q_a }\gtheta_1 + \frac{\partial S_1}{\partial \mu}    \right) d \mu  \\ 
+&+ \left[   B \gmu_1 + m_a
+  v_\parallel \gparallel_1 + \gR_1 \cdot \left( q_a \grad \phi_0 + \mu \grad B + \frac{m_a}{2 }   \grad v_E^2      + \frac{\partial \A^*}{\partial t } \right)  - q_a \phi_1  + \frac{\partial S_1}{\partial t}\right] d t.
+\end{aligned}
+\end{equation}
+%
+The high-frequency components in the fluctuations can be isolated by using the gyroaverage operator in \cref{gyaveroperator}, such that
+%
+\begin{equation} \label{gyaverandwidetilde}
+\quad \phi_1 = \gyaver{\phi_1 }_{\R} + \widetilde{\phi_1}.
+\end{equation}
+%
+Imposing the gyrocenter transformation rules to \cref{overlineGamma1full} yields
+%
+\begin{equation}
+    S_1 = \frac{q}{\Omega}\int_0^\theta d \theta' \widetilde{\phi_1}.
+\end{equation}
+%
+The first order gyrocenter generating functions are given by
+%
+\begin{equation} \label{GYG1}
+    \begin{aligned}
+        \gR_1 &= - \frac{1}{q_a B_{\parallel}^*}\b \times  \grad S_1,\\
+        \gparallel_1 &= \frac{\B^* \cdot \grad S_1}{m_a B_{\parallel}^*},\\
+        \gmu_1 &=  \frac{q_a}{m_a}\frac{\partial S_1}{\partial \theta}, \\
+        \gtheta_1 &= - \frac{q_a}{m_a} \frac{\partial S_1}{\partial \mu}.
+    \end{aligned}
+\end{equation}
+%
+The first order gyrocenter correction ${\Gamma}_1$ in \cref{overlineGamma1full} can then be written as
+%
+\begin{equation} \label{overlineGamma1t}
+{\Gamma}_{1} = - q \left< \phi_1 \right> d t = - \overline H_1 dt.
+\end{equation}
+%
+We remark that the first order gyrocenter correction ${\Gamma}_1$ in \cref{overlineGamma1t} corresponds to the one found in \citet{Brizard2007a,Hahm2009}.
+%
+Using \cref{Znu} and \cref{GYG1}, the gyrocenter coordinates $\overline{\Z} = \left( \gyR, \gyvparallel, \gymu, \gytheta \right)$ accurate up to $O(\epsilon)$ are given by
+%
+\begin{equation} \label{GYcoordinates}
+\begin{aligned}
+\overline{\R } &= \R  +\gR_1,\\
+ \overline{v}_{\parallel} &= v_{\parallel} + \gparallel_1,  \\
+ \overline{\mu}&=\mu+\gmu_1 ,\\
+   \overline{\theta} &= \theta  +\gtheta_1 .
+\end{aligned}
+\end{equation}
+%
+In a similar manner, the system of equations in \cref{systemorderbyorder} can be used to derive a second order Lagrangian $\Gamma_2$ that obeys the gyrocenter transformation rules.
+%
+%The details of the calculation are reported in \cref{appendixGY}.
+%
+The resulting second order gauge function $S_2$ is given by
+%
+\begin{equation}
+    S_2 =\frac{q_a^2}{2 B\Omega_a} \int^\theta d \theta' \left[\frac{\partial \widetilde{\phi_1}^2}{\partial \mu}+\frac{\bm b}{q_a \Omega_a}\cdot\left[\nabla \left(\int^{\theta'} d \theta'' \widetilde{\phi_1}\right) \times \nabla \widetilde{\phi_1}\right]\right],
+\end{equation}
+%
+which allows us to derive the corresponding second-order gyrocenter generating functions ${g}_2^\nu$
+%
+\begin{align}
+\gR_2& = -\frac{1}{q_a} \frac{\b}{B^*_{\parallel}} \times  \grad  S_2, \label{GYG2R}\\
+\gparallel_2& = \frac{ \B^* \cdot \grad S_2}{m_a B^*_{\parallel}}, \label{GYG2parallel}\\
+\gmu_2& = \frac{q_a}{m_a  } \frac{\partial S_2}{\partial \theta} ,  \\
+\gtheta_2& =  - \frac{q_a}{m_a  } \frac{\partial S_2}{\partial \mu} , \label{GYG2theta}
+\end{align}
+%
+and the second order perturbed Lagrangian
+%
+\begin{equation} \label{overlineGamma2}
+{\Gamma}_2 =   \frac{q_a^3}{2  m_a \Omega_a }\left[\frac{\partial \left< \widetilde{\phi_1}^2\right>}{\partial \mu}+\frac{\bm b}{q_a \Omega_a}\cdot\left<\nabla \left(\int^\theta d \theta'\widetilde{\phi_1}\right)\times \nabla \widetilde{\phi_1}\right>\right] d t=-\overline H_2 dt.
+\end{equation}
+
+Therefore, the gyrocenter one-form ${\Gamma}$, accurate up to $O(\epsilon^2)$, is given by 
+%
+\begin{equation} \label{GYGamma}
+{\Gamma}\left( \gyR, \gyvparallel , \gymu\right)  = q_a \overline{\mathbf A^*} \cdot d \overline{\R} + \frac{\overline{\mu} B}{\Omega_a } d \overline{ \theta} - \overline{H}  d t,
+\end{equation}
+%
+with the gyrokinetic Hamiltonian $\overline{H} = \overline{H}_0 + \overline{H}_1+\overline{H}_2$.
+%
+Here, the overline notations $\overline{H}_0$ and $\overline{\mathbf A^*}$ indicate that the guiding-center quantities are now evaluated at $\left( \gyR, \gyvparallel , \gymu \right)$, i.e. $ \overline{H}_0 = H_0(\gyR, \gyvparallel,\gymu)$ in \cref{eq:lagdk} and $\overline{\mathbf A^*} = \mathbf A^*(\gyR, \gyvparallel,\gymu)$.
+%
+The gyrokinetic potential $\phi_1(\mathbf x)$ in $H_1$ and $H_2$ must be evaluated at the particle position $\x$ expressed in the gyrocenter phase-space. 
+%
+Using \cref{eq:GCx,GYcoordinates}, the particle position $\x$ can be written as
+%
+\begin{equation}
+    \mathbf x = \gyR+\overline{\mathbf{\rho}}+O(\epsilon^2),
+\label{eq:bmxx}
+\end{equation}
+%
+with $\overline{\mathbf{\rho}}(\overline{\mathbf Z})=\mathbf \rho (\overline{\mathbf Z}) - \gR_1(\overline{\mathbf Z})$.
+%
+As shown in \citet{Brizard1989,Sugama2000}, the generator $\gR_1$ present in the $\overline{\mathbf{\rho}}$ term in \cref{eq:bmxx} induces third order contributions to the one-form $\gamma_a$.
+%
+Therefore, when evaluating the potential $\phi_1(\mathbf x)$, only its lowest order contribution $\phi_1(\mathbf x)\simeq \phi_1[\gyR+\mathbf \rho(\overline{\mathbf Z})]$ is considered.
+
+The gyrokinetic Hamiltonian $H_1$ and $H_2$ represent the effects on the particle dynamics of small-scale fluctuations of the electric field.
+%
+In particular, we identify the $O(\epsilon)$ term as the first order gyrokinetic potential $\phi_1$.
+%
+The $O(\epsilon^2)$ modification, however, is a nonlinear contribution that represents nonlinear ponderomotive effects driven by $\phi_1$.
+%
+In fact, in the long wavelength limit, with $\phi \simeq (1+\mathbf \rho \cdot \nabla + \mathbf \rho \rho :\nabla \nabla)\left<\phi\right>$, we find that
+%
+\begin{equation}
+    H_2 \simeq -\frac{1}{2}m_a \mathbf v_E^2.
+\label{eq:secondh}
+\end{equation}
+%
+For a more detailed discussion on the physics of the Hamiltonian present in \cref{eq:secondh} see \citet{Krommes2013}.
+
+By applying the Euler-Lagrange equations to the Lagrangian in \cref{GYGamma} or, equivalently, by varying the action ${A} = \int {\Gamma} $, second-order nonlinear  gyrokinetic equations of motion are obtained
+%
+\begin{align} \label{EulerLagrange}
+  q_a \B^* \times \dot{\gyR} + m_a \b \dot{\gyvparallel}  & = -\gygrad \left[ q_a ( \phi_0 + \gyaver{ \phi_1}_{\gyR}) +H_2 + \frac{m_a}{2}\gyvparallel^2 + \frac{m_a}{2} v_E^2 + \gymu B \right] - q_a \frac{\partial  \overline{\A^*}}{\partial t},
+\end{align}
+%
+with $\gyvparallel = \b \cdot \dot{\gyR}$, and $\dot{\gymu}=0$.
+%
+In \cref{EulerLagrange}, we have defined the gyroaveraging operator $\left<\chi\right>_{\gyR}$ as
+%
+\begin{equation}
+    \lb \chi \rb_{\gyR} = \frac{1}{2\pi}\int_0^{2\pi} \chi (\overline \theta) d\overline \theta,
+\label{overlinegyaveroperator}
+\end{equation}
+%
+which is performed at fixed position $\gyR$.
+%
+The $\dot{\gyR}$ and $\dot{\gyvparallel}$ equations of motion can be obtained by taking the vector and scalar product  of \cref{EulerLagrange} with $\b$ and $\B^*$, respectively.
+%
+This yields
+%
+\begin{align} 
+    \dot{ \gyR} & = \overline{\U} + \frac{B}{ B^*_{\parallel}\Omega_a } \b \times \left( \frac{d \overline{\U} }{d t}  + \frac{\gymu}{m_a} \gygrad B\right) +  \frac{\b}{B^*_{\parallel}}  \times \gygrad \left(\gyaver{ \phi_1}_{\gyR}+\frac{H_2}{q_a}\right), \label{GYdotR} \\ 
+    m_a \dot{\gyvparallel} & = q_a E_{\parallel}  - \gymu \overline \nabla_\parallel \B  + m_a \mathbf v_E \cdot \frac{d \b}{d t} - {m_a}\overline{\mathcal{A}}- q_a\frac{\B^*}{B_{\parallel}^*} \cdot \gygrad \left(\gyaver{ \phi_1}_{\gyR}+\frac{H_2}{q_a}\right), \label{GYdotvparallel}   \\ 
+    \dot \gytheta & =   \Omega_a + \frac{q_a^2}{m_a } \gypmu  \left(\gyaver{ \phi_1}_{\gyR}+\frac{H_2}{q_a}\right), \label{GYdottheta}
+\end{align}
+%
+where the convective derivative $d/dt$ is defined as $d/dt = \partial_t  + \overline{\U} \cdot \gygrad$ with the lowest order particle velocity $\overline{\U} = \mathbf v_E + \gyvparallel \b$.
+%
+Similarly to the drift-kinetic case, \Cref{GYdotR} describes the motion of a single gyrocenter in the tokamak periphery.
+%
+Besides $\overline{\mathbf U}$, the particle velocity includes the polarization drift of the background electric field, i.e. $1/\Omega_a \b \times d_t \overline{\U}$, the magnetic gradient drifts, such as, e.g., $\gymu/ \Omega_a \b \times \gygrad B$, and the gyrokinetic $\mathbf E \times \mathbf B$ drift, .i.e., $\b \times \gygrad (H_1+H_2)/(q_a B)$ due to small-scale fluctuations.
+%
+\Cref{GYdotvparallel} is the parallel momentum equation that, besides the drift-kinetic contributions similar to \cref{eq:GC2}, includes an additional parallel force due to the parallel gradients of the gyrokinetic Hamiltonian $H_1+H_2$.
+%
+Finally, \cref{GYdottheta} represents the evolution in time of the gyrocenter gyrophase $\gytheta$ of the particle, which is different from the physical gyroangle $\theta$ due to small-scale perturbations in the particle gyromotion.
+
+With respect to \cref{ch:dk}, the equations of motion in \cref{GYdotR,GYdotvparallel} take into account second order accurate gyrokinetic fluctuations that can be used to describe the evolution of the plasma distribution function due to both large-scale $\phi_0$ and small-scale $\phi_1$ time dependent fluctuations.
+%
+We remark that second order gyrokinetic effects are needed in order to obtain an energy conservation law when applying Noether's theorem \citep{Brizard2007a}.
+%
+While in the present thesis, an electrostatic model first order accurate in the guiding-center dynamics and second order for the gyrokinetic fluctuations is considered, in \citet{Frei2019}, we improve \cref{GYdotR,GYdotvparallel} by using a Lie-transform perturbation methods to describe both guiding-center and gyrocenter dynamics up to second order in $\epsilon$ and to include electromagnetic fluctuations, which constitute an important improvement over previous gyrokinetic models for the edge region \citep{Hahm2009,Dimits2012,Madsen2013}.
+
+\subsection{The Gyrokinetic Equation}
+
+The gyrokinetic equation dictates the evolution of the gyrocenter distribution function $\overline F$, which is related to the guiding-center distribution function $F$ and to the particle distribution function $f(\mathbf x, \mathbf{v})$ via
+%
+\begin{equation}
+    \overline F(\overline{\mathbf Z}) = F(\mathbf Z)=f(\mathbf x, \mathbf v).
+\end{equation}
+%
+Similarly to \cref{eq:boltzmannSS} we use the chain rule to rewrite the Boltzmann equation, \cref{eq:boltzmann}, in gyrocenter coordinates $\overline{\mathbf Z}$, yielding
+%
+\begin{equation}
+     \frac{\partial \overline{F_a}}{\partial t}+\dot{\gyR}\cdot \nabla \overline{F_a} + \dot{\overline v_\parallel}\frac{\partial \overline{F_a}}{\partial \overline v_\parallel} + \dot {\overline \theta} \frac{\partial \overline{F_a}}{\partial \overline \theta} = C(\overline{F_a}),
+     \label{eq:boltzmannSSgk}
+\end{equation}
+%
+where we used the fact that $\dot{\overline \mu}=0$.
+%
+We simplify \cref{eq:boltzmannSSgk} by applying the gyroaveraging operator at constant $\gyR$.
+%
+This results in the gyrokinetic equation
+%
+\begin{equation}
+    \frac{\partial \lb \overline{F_a} \rb_{\gyR}}{\partial t}+ \dot{\gyR} \cdot \nabla\lb \overline{F_a} \rb_{\gyR} + \dot {\overline v_{\parallel}}\frac{\partial \lb \overline{F_a} \rb_{\gyR}}{\partial \overline v_\parallel} = \lb C(\overline{F_a})\rb_{\gyR}.
+    \label{eq:boltzmanngk1}
+\end{equation}
+%
+In order to derive a moment-hierarchy model from the gyrokinetic equation, we write \cref{eq:boltzmanngk1} in a conservative form.
+%
+We note that the gyrocenter phase-space volume element, $B_\parallel^* / m_a$, is conserved along the gyrocenter trajectories in phase-space \citep{Brizard2007a} and, therefore, satisfies Liouville's theorem,
+ %
+ \begin{equation}
+ \frac{\partial B_\parallel^*}{\partial t} + \gygrad \cdot \left( \dot{\gyR} B_\parallel^*     \right) + \frac{\partial }{\partial \gyvparallel} \left(  \dot{\gyvparallel} B_\parallel^* \right) =0. 
+ \label{eq:liouvillegk}
+ \end{equation}
+%
+Using the conservation law for $B_\parallel^*$ in \cref{eq:liouvillegk}, from \cref{eq:boltzmanngk1}, we obtain
+%
+\begin{equation}
+    \begin{split}
+        &\frac{\partial \left(B_{\parallel}^*\lb \overline{F_a} \rb_{\gyR}\right)}{\partial t}+ \nabla \cdot \left( \dot{\gyR} B_{\parallel}^*\lb \overline{F_a} \rb_{\gyR}\right) + \frac{\partial\left( \dot {\overline v_{\parallel}} B_{\parallel}^*\lb \overline{F_a} \rb_{\gyR}\right)}{\partial \overline v_\parallel} = B_{\parallel}^*\lb C(\overline{F_a})\rb_{\gyR}. 
+    \end{split}
+    \label{eq:boltzmanngk}
+\end{equation}
+
+\section{Gyrokinetic Moment-Hierarchy}
+\label{sec:mhgk}
+
+We now simplify the solution of \cref{eq:boltzmanngk} by expanding the gyrocenter distribution function in a Hermite-Laguerre polynomial basis, therefore extending the moment-hierarchy equation derived in \cref{ch:dk} to the gyrokinetic regime.
+%
+We expand $\lb \overline{F_a} \rb_{\gyR}$ as
+%
+\be
+    \begin{split}
+        \lb \overline{F_a} \rb_{\gyR} &=\sum_{p,j=0}^{\infty} \frac{\overline N_a^{pj}}{\sqrt{2^p p!}} \overline F_{Ma}  H_p(\overline s_{\parallel a})L_j(\overline s_{\perp a}^2),
+    \end{split}
+    \label{eq:gyrofgk}
+\ee
+%
+where all the quantities in \cref{eq:gyrofgk} are evaluated at the gyrocenter coordinates $\overline{\mathbf Z}$, and the gyrokinetic Maxwellian $ \overline F_{Ma}$ is given by
+%
+\begin{equation}
+     \overline F_{Ma}=\frac{\overline N_a}{\pi^{3/2} \overline v_{th\parallel a} \overline v_{th\perp a}^2}e^{-\overline s_{\parallel a}^2-\overline s_{\perp a}^2},
+\end{equation}
+%
+with $\overline v_{th\parallel a}^2=2 \overline T_{\parallel a}/m_a$, $\overline v_{th \perp a}^2 = 2 \overline T_{\perp a}/m_a$, $\overline s_{\parallel a} = (\overline v_\parallel - \overline u_{\parallel a})/\overline v_{th \parallel a}$ and $\overline s_{\perp a}^2 = \overline \mu B/\overline T_{\perp a}$. 
+%
+The evolution for the coefficients $\overline N_a^{pj}$ are obtained by projecting the gyrokinetic equation, \cref{eq:boltzmanngk}, in a Hermite-Laguerre basis using the projector ${\ovmomentstar{lk}{\chi}}$, defined as
+%
+\begin{equation} \label{projectorstarlk}
+ {\ovmomentstar{pj}{\chi} } = \frac{1}{N_a}\int d \gyvparallel  d \gymu d \gytheta   \frac{B^*_\parallel}{ m_a}  \chi \gyaver{\gyFa}  H_p(\overline s_{\parallel a})L_j(\overline s_{\perp a}^2).
+\end{equation}
+%
+Similarly to \cref{eq:overlinenapj}, a relation between the moments $\overline N_a^{*pj}=\ovmomentstar{pj}{1}$ and the gyrocenter moments $\overline N_a^{pj}$ can be obtained using the definition of $B_{\parallel}^*$ in \cref{eq:defbpars}, yielding
+%
+\begin{equation}
+    \overline N_a^{*pj}=\ovmomentstar{pj}{1}=\frac{\b \cdot \B_a^*}{B} \overline N_a^{lk}  + \frac{ \vthparallel \b \cdot \gygrad \times \b }{\sqrt{2}\Omega_a } \left( \sqrt{l+1} N_a^{l+1k} + \sqrt{l} \overline N_a^{l-1k} \right).
+\end{equation}
+
+We now apply the projector ${\ovmomentstar{lk}{\chi}}$ to the gyrokinetic equation, \cref{eq:boltzmanngk}.
+By introducing the convective fluid derivative 
+%
+\begin{equation} \label{convectivederivative}
+\frac{d_a^{*lk}}{d t} = \frac{\partial }{\partial t} + \ovmomentstar{lk}{\dot \gyR} \cdot \gygrad,
+\end{equation}
+%
+the gyrokinetic moment equation hierarchy equation describing the evolution of the moments $\gyN^{lk}$ is given by
+%
+\begin{equation} \label{GyromomentHierarchyEquation}  
+\frac{\partial \overline \gyN^{*lk} }{\partial t }  + \gygrad \cdot \ovmomentstar{lk}{\dot \gyR}  - \frac{\sqrt{2l}}{ \vthparallel}\ovmomentstar{l-1k}{\dot \gyvparallel} + \mathcal{F}_a^{lk} = C_a^{lk},
+\end{equation}
+%
+with $C_a^{lk}$ the Hermite-Laguerre moments of the Coulomb collision operator (subject of \cref{ch:op}) and $\mathcal{F}_{a}^{lk}$ the fluid operator
+%
+\begin{align} \label{fluidoperatoralk}
+\mathcal{F}_{a}^{lk} & = \frac{d_a^{*lk}}{d t} \ln \left(\gyN \Tparallel^{l/2}  \Tperp^k B^{-k}\right)  + \frac{\sqrt{p(p-1)}}{2} \frac{d_a^{*l-2k}}{d t} \ln \Tparallel \nonumber \\
+ &  - k \frac{d_a^{*lk-1}}{d t} \ln \left(   \frac{\Tperp}{B} \right) + \frac{\sqrt{2l}}{\vthparallel} \frac{d_a^{*l-1k}}{d t} \uparallel.
+\end{align}
+
+In order to simplify the evaluation of ${\ovmomentstar{lk}{\dot \gyR}}$ and ${\ovmomentstar{lk}{\dot{\overline v_\parallel}}}$, we first rewrite the gyrokinetic equations of motion present in the gyrokinetic equation as
+%
+\begin{equation}
+    \dot \gyR = \left.\dot{\mathbf R}\right|_{\mathbf Z=\overline{\mathbf Z}}+\frac{\mathbf b}{B_\parallel^*}\times \overline \nabla \left(\gyaver{ \phi_1}_{\gyR}-\frac{q_a^3}{2  m_a \Omega_a } \frac{\partial \left< \widetilde{\phi_1}^2 \right>_{\gyR}}{\partial \overline \mu}\right),
+\end{equation}
+%
+and
+%
+\begin{equation}
+    \dot \gyvparallel = \left.\dot v_{\parallel}\right|_{\mathbf Z=\overline{\mathbf Z}} - q_a\frac{\mathbf B^*}{B_\parallel^*}\cdot \overline \nabla  \left(\gyaver{ \phi_1}_{\gyR}-\frac{q_a^3}{2  m_a \Omega_a } \frac{\partial \left< \widetilde{\phi_1}^2 \right>_{\gyR}}{\partial \overline \mu}\right),
+\end{equation}
+%
+where $\left.\dot{\mathbf R}\right|_{\mathbf Z=\overline{\mathbf Z}}$ and $\left.\dot v_{\parallel}\right|_{\mathbf Z=\overline{\mathbf Z}}$ are the guiding-center equations of motion \cref{eq:rdotGCform,eq:vparGCform} evaluated at $\overline{\mathbf Z}$.
+%
+We note that, in the second order Hamiltonian $H_2$ in \cref{overlineGamma2}, we have neglected the term 
+${\bm b}\cdot\left<\nabla \left(\int^\theta d \theta'\widetilde{\phi_1}\right)\times \nabla \widetilde{\phi_1}\right>/({q_a \Omega_a})$ as it can be shown to be always smaller than ${\partial_\mu \left< \widetilde{\phi_1}^2\right>}$ by a factor of $\rho_a |\nabla B/B|$ \citep{Hahm2009}.
+%
+Therefore, the moments ${\ovmomentstar{lk}{\dot \gyR}}$ and ${\ovmomentstar{lk}{\dot{\overline v_\parallel}}}$ can be expressed as
+%
+\begin{equation}
+    \ovmomentstar{lk}{\dot \gyR} = \left.\momentstar{lk}{\dot{\mathbf R}}\right|_{\mathbf Z=\overline{\mathbf Z}}+ \frac{\mathbf b}{B}\times\ovmomentstar{lk}{\frac{B}{B_\parallel^*} \overline \nabla\gyaver{ \phi_1}_{\gyR}}-\frac{q_a^3}{2  m_a \Omega_a } \frac{\mathbf b}{B}\times\ovmomentstar{lk}{\frac{B}{B_\parallel^*}\frac{\partial}{\partial \overline \mu}\overline \nabla \left< \widetilde{\phi_1}^2 \right>_{\gyR}},
+\label{eq:ovrdr}
+\end{equation}
+%
+and
+%
+\begin{equation}
+    \ovmomentstar{lk}{\dot{\overline v_\parallel}} = \left.\momentstar{lk}{\dot{ v_\parallel}}\right|_{\mathbf Z=\overline{\mathbf Z}} - q_a\cdot \ovmomentstar{lk}{\frac{\mathbf B^*}{B_\parallel^*}\cdot\overline \nabla\gyaver{ \phi_1}_{\gyR}}+\frac{q_a^4}{2  m_a \Omega_a } \ovmomentstar{lk}{\frac{\mathbf B^*}{B_\parallel^*}\cdot \frac{\partial}{\partial \overline \mu}\overline \nabla \left< \widetilde{\phi_1}^2 \right>_{\gyR}},
+    \label{eq:ovrdv}
+\end{equation}
+%
+with $\momentstar{lk}{\dot{\mathbf R}}$ and $\momentstar{lk}{\dot{ v_\parallel}}$ given by \cref{eq:finalDKE3,eq:finalDKE4}, respectively, with $\mathbf{Z}=\overline{\mathbf{ Z}}$ and $N_a^{lk}=\overline N_a^{lk}$.
+
+We now derive an expression for the second and third terms appearing on the right-hand side of \cref{eq:ovrdr,eq:ovrdv} as functions of moments $\overline N_a^{lk}$ of the distribution function.
+%
+As a first step, we derive an analytical formula for the Hermite-Laguerre moments of the gyroaveraged electrostatic potential $\left< \phi_1 \right>_{\gyR}$ and $\left< \widetilde{\phi_1}^2 \right>_{\gyR}$.
+%
+Considering that, at leading order, $\mathbf x \simeq \gyR+\gyrhoa$ with $\gyrhoa=\mathbf \rho_a\left(\gyZ\right)$, we write $\phi_1$ by using its Fourier harmonics, that is
+%
+\begin{equation}
+    \phi_1(\mathbf x) = \int \phi_1(\mathbf k)e^{i \mathbf k \cdot \gyR}e^{i \mathbf k \cdot \gyrhoa} d \mathbf k.
+\end{equation}
+%
+By taking advantage of the Jacobi-Anger expansion of \cref{eq:jacobianger}, $\phi_1(\mathbf x)$ can be written as
+%
+\begin{equation}
+    \phi_1(\mathbf x) = \sum_{l=-\infty}^{\infty} i^l e^{i l \overline \theta} \int \phi_1(\mathbf k)e^{i \mathbf k \cdot \gyR}J_l(k_\perp \overline \rho_a) d \mathbf k,
+\label{eq:phi1gyro}
+\end{equation}
+%
+and, integrating \cref{eq:phi1gyro} over $\overline \theta$, the gyroaveraged electrostatic potential $\phi_1$ becomes
+%
+\begin{equation}
+    \left<\phi_1\right>_{\gyR} = \int \phi_1(\mathbf k)e^{i \mathbf k \cdot \gyR}J_0(k_\perp \overline \rho_a) d \mathbf k.
+\label{eq:phi1gyro1}
+\end{equation}
+
+The $\overline \mu$ and $k_\perp$ dependence in the Bessel function $J_0(k_\perp \rho_a)$ can be further decomposed by introducing the parameter $\rho_{tha} = \overline v_{th\perp a}/\Omega_a$ and noting that $\overline \rho_a = \sqrt{\overline \mu B/\overline T_{\perp a}} \rho_{tha}=\overline s_{\perp a} \rho_{tha}$, which allows the use of the following identity between Bessel and Legendre functions \citep{Zwillinger2014}
+%
+\begin{equation}
+    J_m(2 b_a \overline s_{\perp a}) = b_a^m \overline s_{\perp a}^{m}e^{-b_a^2}\sum_{r=0}^\infty \frac{L_r^m(\overline s_{\perp a}^2)}{(m+r)!}b_a^{2r}.
+\label{eq:bessLeg}
+\end{equation}
+%
+with $b_a=k_\perp \rho_{tha}/2$.
+%
+The zeroth order Bessel function can therefore be written in terms of Laguerre polynomials as
+%
+\begin{equation}
+    J_0(2 b_a \overline s_{\perp a}) = \sum_{r=0}^\infty {K}_r(b_a){L_r(\overline s_{\perp a}^2)}.
+\label{eq:besslag0}
+\end{equation}
+%
+with the Kernel function
+%
+\begin{equation}
+    {K}_r(b_a)=\frac{b_a^{2r}}{r!}e^{-b_a^2}.
+\end{equation}
+%
+We can then develop the velocity dependence of $\left<\phi_1\right>_{\gyR}$ explicitly in terms of Laguerre polynomials as
+%
+\begin{equation}
+    \left<\phi_1\right>_{\gyR} = \sum_l L_r (\overline s_{\perp a}^2) \int \phi_1(\mathbf k)e^{i \mathbf k \cdot \gyR}{K}_r(b_a) d \mathbf k.
+\label{eq:phi1gyro2}
+\end{equation}
+
+We now apply the projection operator to $\left<\phi_1\right>_{\gyR}$, therefore evaluating $\ovmomentstar{lk}{\left<\phi_1\right>_{\gyR}}$.
+%
+We note that the evaluation of $\ovmomentstar{lk}{\left<\phi_1\right>_{\gyR}}$ requires the calculation of an integral of the product of three Laguerre polynomials.
+%
+This is due to the fact that the projection operator $\overline{||..||}_a^{*pj}$ in \cref{projectorstarlk} contains a Laguerre polynomial factor, one Laguerre polynomial comes from the Hermite-Laguerre expansion of the distribution function, and the third Laguerre polynomial is present due to the fact that the gyroaveraged electrostatic potential $\left<\phi_1\right>_{\gyR}$ in \cref{eq:phi1gyro2} is also composed of linear combination of Laguerre polynomials.
+%
+We then express the product of two Laguerre polynomials in terms of a single polynomial, therefore writing the product $L_k(x) L_n(x)$ as
+%
+\begin{equation} \label{laguerrelaguerre2laguerre}
+ L_k L_n = \sum_{s = \lvert k - n\rvert}^{ \lvert k + n\rvert} \alpha^{kn}_s L_s,
+\end{equation}
+%
+where the expansion coefficients $\alpha^{kn}_s$ are determined by the Laguerre polynomial orthogonality relation \cref{eq:normlkl} 
+%
+\begin{equation}
+\alpha^{kn}_{s} = \int_0^{\infty} d x e^{-x} L_{k}(x) L_{n}(x) L_s(x).
+\end{equation}
+%
+A closed formula of the coefficients $\alpha_s^{kn}$ is given by \citep{Gillis1960}
+%
+\begin{equation} \label{alphaknt}
+\alpha^{kn}_s = \left( - 1 \right)^{k+n - s } \sum_{m} \frac{ 2^{2m - k -n +s }   \left( k + n - m \right)!}{(k-m)!(n-m)!(2m - k - n +s)!(k+n -s -m)!},
+\end{equation}
+%
+where the summation is over all possible values of $m$ such that the factorials are definite-positive.
+%
+By applying the Hermite-Laguerre operator to \cref{eq:phi1gyro2}, we obtain in Fourier harmonics
+%
+\begin{equation}\label{momentlkgyaverphi1}
+    \frac{1}{N_a}\ovmomentstar{lk}{\gyaver{\phi_1}_{\gyR}} = \sum_{n=0}^\infty \mathcal{D}_{an}^{lkn}(b_a)  \phi_1(\mathbf k ),
+\end{equation}
+%
+where we introduce the FLR operator
+%
+\begin{equation} \label{Danlkj}
+\mathcal{D}_{an}^{lkj}(b_a)= \sum_{r = |j-k|}^{|j+k|} \alpha_r^{jk} \overline N^{*lr} K_{n}(b_a).
+\end{equation}
+
+We can now derive an expression for the moments of the guiding-center velocity in \cref{eq:ovrdr}.
+%
+Applying the projector operator, \cref{projectorstarlk}, to the gradient of ${\gyaver{\phi_1}_{\gyR}}$, we obtain, in Fourier harmonics
+%
+\begin{equation}  \label{momentlkgradgyaverf1}
+\frac{\mathbf b}{N_a}\mathbf b \times \ovmomentstar{lk}{\frac{B}{B_{\parallel}^*}\overline \grad \gyaver{\phi_1}_{\gyR}}  = \mathbf b \times \sum_{n = 0 }^{\infty} \mathbf{{D}}^{lkn}_{an}(b_a,  \mathbf k) \phi_{1 }(\mathbf k),
+\end{equation}
+%
+where we introduce the FLR gradient operator
+%
+\begin{align} \label{bmDanlkj}
+\mathbf{{D}}^{lkj}_{an} (b_a, \mathbf k) & = i \mathbf k \mathcal{D}_{an}^{lkj}+\sum_p \sum_{s = |p -k|}^{|p+k|}\left[  \left( \delta_p^j- \delta_p^{j-1} \right)  j  \alpha_s^{pk}  \gyN^{ls} \gygrad \ln \left( \frac{B}{\Tperp}\right) K_{n}\right. \nonumber \\
+&  \left. +   
+\delta_p^j  \alpha_s^{pk}  \gyN^{ls}  \gygrad \ln \left( \frac{\sqrt{\gyTperp}}{B}\right)  \left( \frac{ b_a^2}{2} \right) \left( K_{n-1} - K_{n}\right) \right].
+ \end{align}
+%
+The second order contribution $\left<\widetilde{\phi_1}^2\right>_{\gyR}$ in \cref{eq:ovrdr} is rewritten using $\phi_1=\left<\phi_1\right>_{\gyR}+\widetilde{\phi_1}$, yielding
+%
+\begin{equation}
+    \left<\widetilde{\phi_1}^2\right>_{\gyR}=\left<\phi_1^2\right>_{\gyR}-\left<\phi_1\right>_{\gyR}^2.
+\label{eq:widetildephi1}
+\end{equation}
+%
+Furthermore, we convert the derivatives in $\overline \mu$ in \cref{eq:ovrdr} to derivatives with respect to $\overline s_{\perp a}^2$, by using
+%
+\begin{equation}
+     \frac{\partial}{\partial \overline \mu} \nabla \left<\phi_1^2\right>_{\gyR} = \frac{B}{T_{\perp a}} \frac{\partial \left<\phi_1^2\right>_{\gyR}}{\overline s_{\perp a}^2}\nabla -\nabla \left( \ln \frac{\overline T_{\perp a}}{B}\right)\frac{\partial \left<\phi_1^2\right>_{\gyR}}{\partial \overline \mu}.
+\label{eq:asdd}
+\end{equation}
+%
+We project both terms in \cref{eq:asdd} into a Hermite-Laguerre basis.
+%
+For the first term, we use the identity
+%
+\begin{align} \label{momentstarlkpmugyaverphi1A1}
+ \frac{1}{N_a}\moment{lk}{ \frac{\partial \gyaver{ \phi_1^2 } }{\partial \gymu}  }& =   - \frac{B}{\overline T_{\perp a}} \int d \mathbf k \mathbf k'  e^{i (\mathbf k + \mathbf k') \cdot \gyR}\sum_{n=1}^\infty \sum_{j =0}^{n-1} D_{an}^{lkj} (b_a + b_a') \phi_{1}(\mathbf k) \phi_{ }(\mathbf k'),
+\end{align}
+%
+for the projection of $\left<\phi_1^2\right>_{\gyR}$ and
+%
+\begin{align} \label{momentstarlkpmugyaverphi1gyaverA1}
+    \frac{1}{N_a}\moment{lk}{ \frac{\partial \gyaver{\phi_1}_{\gyR}^2}{\partial \gymu}   } &= - \frac{B}{\overline T_{\perp a}} \int d \mathbf k d \mathbf k' e^{i (\mathbf k + \mathbf k') \cdot \gyR} \sum_{n,n' = 0}^\infty  \sum_{\substack{r= |n-n'|\\ r \neq 0}}^{|n +n'|} \nonumber\\
+    &\times \alpha_r^{nn'} \sum_{s=0}^{r-1} D_{ann'}^{lks}(b_a,b_a')   \phi_1(\mathbf k)\phi_{1}(\mathbf k') ,
+\end{align}
+%
+for $\left<\phi_1\right>_{\gyR}^2$, with the $D_{ann'}^{lkj}(b_a,b_a')$ operator given by
+%
+\begin{equation}
+     D_{ann'}^{lkj}(b_a,b_a') = \sum_{t = |j-k|}^{|j+k|} \alpha_t^{jk} K_{n}(b_a) K_{n'}(b_a') N_a^{lt}.
+\end{equation}
+%
+Finally, for the second term in \cref{eq:asdd}, we use the identities
+%
+\begin{align} \label{momentstarlkgradpmugyaverphi1A1}
+    \frac{1}{N_a}\moment{lk}{\gygrad \frac{\partial \gyaver{ \phi_1^2 }}{\partial \sperp^2} } & =  -    \int d\mathbf k d \mathbf k' e^{i (\mathbf k + \mathbf k') \cdot \gyR} \sum_{n=1}^\infty \sum_{j =0}^{n-1} \mathbf{{D}}_{a n}^{lkj}(b_a + b_a', \mathbf k +  \mathbf k') \phi_1(\mathbf k)\phi_1(\mathbf k'),
+\end{align}
+%
+and
+%
+\begin{align} \label{momentstarlkgradpmugyaverphi1gyaverA1}
+\frac{1}{N_a}  \moment{lk}{\gygrad \frac{\partial \gyaver{\phi_1}_{\gyR}^2}{\partial \sperp^2}  } &= - \int d \mathbf k d\mathbf k' e^{i (\mathbf k + \mathbf k') \cdot \gyR} \nonumber\\
+&\times\sum_{n,n' = 0}^\infty  \sum_{\substack{r= |n-n'| \\ r \neq 0}}^{|n +n'|} \sum_{s=0}^{r-1}  \alpha_r^{nn'} \mathbf{D}_{ann'}^{lks}(b_a,b_a',\mathbf k,\mathbf k')  \phi_1(\mathbf k)\phi_1(\mathbf k') ,
+\end{align}
+%
+where the FLR gradient operator $\mathbf {D}_{ann'}^{lkj}(b_a,b_a',\mathbf k,\mathbf k')$ is defined by
+%
+ \begin{align} \label{bmDannlkj}
+\mathbf{D}_{ann'}^{lkj} & =  \sum_p \sum_{t = |p -k|}^{|p+k|}\left[   \delta_p^j \alpha_t^{pk}  \gyN^{lt} K_{n}(b_a) K_{n'}(b'_a) i (\mathbf k +\mathbf k')  \right. \nonumber \\
+&\left.  + \delta_p^j \alpha_t^{pk}  \gyN^{lt}  \gygrad \ln \left( \frac{\sqrt{\gyTperp}}{B}\right) \left(  n K_{n}(b_a) K_{n'}(b_a' )+ n' K_{n'}(b'_a) K_{n}(b_a)\right) \right. \nonumber \\
+&  \left. +   \left[  \left( \delta_p^j- \delta_p^{j-1} \right)  j  \alpha_t^{pk}  \gyN^{lt} \gygrad \ln \left( \frac{B}{\Tperp}\right) \right. \right. \nonumber \\
+&  \left. \left. -   \delta_p^j  \alpha_t^{pk}  \gyN^{ls}  \gygrad \ln \left( \frac{\sqrt{\gyTperp}}{B}\right) \frac{ b_a^2+b_a'^2}{2}   \right]K_{n}(b_a) K_{n'}(b_a')   \right].
+ \end{align}
+%
+In \cref{bmDannlkj}, we define $b_a'=k_\perp' \rho_{tha}$.
+%
+The identities above  to obtain the gyrokinetic corrections to the projection of the guiding-center velocities and accelerations in \cref{eq:ovrdr,eq:ovrdv} analytically in terms of moments $\overline N_a^{lk}$ of the distribution function $\overline{F_a}$.
+
+\section{Gyrokinetic Poisson's Equation}
+\label{sec:megk}
+
+In order to evaluate the electrostatic potential $\phi$ appearing in the moment-hierarchy equation, \cref{GyromomentHierarchyEquation}, we derive a Hermite-Laguerre formulation of the Poisson's equation valid at $k_\perp \rho_s \sim 1$ in gyrocenter coordinates.
+%
+We start from \cref{eq:poissonotexact3} and use the pullback operator in \cref{pullback} to write the guiding-center distribution function $F_a$ in terms of the gyrocenter distribution function $\overline{F_a}$ in guiding-center coordinates.
+%
+This yields
+%
+\begin{equation}
+    F_a(\mathbf Z) = \overline{F_a}(\mathbf Z) + \mathbf g_1^{R} \cdot \overline \nabla \overline{F_a}(\mathbf Z) + \gparallel_1 \frac{\partial \overline{F_a}(\mathbf Z)}{\partial \overline v_\parallel} + \gmu_1 \frac{\partial \overline{F_a}(\mathbf Z)}{\partial \overline \mu} + \gtheta_1 \frac{\partial \overline{F_a}(\mathbf Z)}{\partial \overline \theta}.
+\label{eq:fabmz1}
+\end{equation}
+%
+Similarly to \cref{sec:poisson}, we neglect the gyrophase dependence of the distribution function $\tilde F_a < \epsilon^2 \left< \overline{F_a}\right>_{\gyR}$.
+%
+For consistency, we also neglect higher order contributions in \cref{eq:fabmz1} as they can be shown to be higher order  \citep{Hahm2009,Madsen2013}.
+%
+We therefore write
+%
+\begin{equation}
+    F_a(\mathbf Z)\simeq \gyaver{\overline{F_a}}_{\gyR} + \frac{q_a^2}{B}\widetilde{\phi_1}\frac{\partial \gyaver{\overline{F_a}}_{\gyR}}{\partial \overline \mu}.
+\label{eq:faag1}
+\end{equation}
+
+By plugging \cref{eq:faag1} in Poisson's equation, \cref{eq:poissonotexact3}, we obtain
+%
+\begin{equation}
+\begin{split}
+    \epsilon_0 \nabla \cdot \mathbf E = \sum_a &q_a ( N_{a\gyR}+ N_{a \overline \mu}),
+\end{split}
+\label{eq:poissonotexact31}
+\end{equation}
+%
+with $N_{a \gyR}$ the gyrocenter density
+%
+\begin{equation}
+    N_{a \gyR} = \int   e^{i \mathbf k \cdot \mathbf {\overline R}} \frac{B_\parallel^*}{m_a}   J_0(k_\perp \rho_a)\left<\overline{F_a}\right>_{\gyR} dv_\parallel d\mu d \mathbf k,
+\label{eq:gyrden1}
+\end{equation}
+%
+and $N_{a \overline \mu}$ the polarization density
+%
+\begin{align}
+    N_{a \overline \mu}&= \int dv_\parallel d\mu d\theta \frac{B_\parallel^*}{m_a} \frac{q_a^2}{B}\Gamma_0\left[\widetilde{\phi_1}\frac{\partial \gyaver{\overline{F_a}}_{\gyR}}{\partial \overline \mu}\right],
+\end{align}
+%
+with $\Gamma_0$ defined by \cref{eq:fourbesseloperator}.
+%
+In the expression for $N_{a \gyR}$, \cref{eq:gyrden1}, we use the relation between Bessel functions and Laguerre polynomials, \cref{eq:besslag0}, and write $N_{a \gyR}$ in Fourier harmonics as
+%
+\begin{equation}
+    N_{a \gyR} =\sum_n K_n (b_a) \overline N_a^{* 0 n}.
+\label{eq:gyrden}
+\end{equation}
+%
+For the polarization density $N_{a \overline \mu}$, we expand both $\phi_1$ and $\left<\overline{F_a}\right>$ in Fourier harmonics, yielding
+%
+\begin{align}
+    N_{a \overline \mu}(\gyR)&=\frac{q_a \overline N_a}{\overline T_{\perp a}}\left[\sum_{n=1}^\infty\sum_{m=0}^{n-1}K_n(b_a)\phi_1(\gyR) \overline N_a^{*0m}(\mathbf k)\right.\nonumber\\
+    &\left.-\sum_{s,r=0}^{\infty}\sum_{\substack{t= |s-r| \\ t \neq 0}}^{|s+r|}\alpha_t^{sr}\sum_{p=0}^{t-1}\int e^{i \mathbf k' \cdot \gyR}K_s(b_a+b_a')K_r(b_a')\overline N_a^{*0p}(\mathbf k') \delta(\mathbf k) \right].
+\label{eq:polden}
+\end{align}
+%
+We note that, in the drift-kinetic limit $\phi_1=0$ and $k_\perp \rho_s \ll 1$, the Poisson's equation in \cref{eq:poissonotexact31} reduces to the one in \cref{eq:poissonfin2}.
+
+\section{Conclusion}
+%
+In this chapter, a full-F gyrokinetic moment-hierarchy is derived, able to evolve the turbulent plasma dynamics in the tokamak periphery.
+%
+The moment-hierarchy equation is derived from a gyrokinetic equation where second order corrections with respect to the drift-kinetic equations are included to describe $k_\perp \rho_s \sim 1$ fluctuations.
+%
+The equations of motion are derived by using the perturbation approach provided by the Lie transform framework.
+%
+We describe the main elements of this approach.
+%
+This allows us to describe the evolution of the coefficients of the Hermite-Laguerre expansion of the gyrokinetic distribution function analytically in terms of moments of the distribution function, including the gyroaveraging of the electrostatic potential.
+%
+Finally, a Poisson's equation valid in the gyrokinetic $k_\perp \rho_s \sim 1$ regime is derived.
